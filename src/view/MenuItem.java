@@ -31,6 +31,16 @@ public class MenuItem {
 	}
 
 	
+	public void setX(int x) {
+		this.x = x;
+	}
+
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+
 	public boolean isVisible() {
 		return visible;
 	}

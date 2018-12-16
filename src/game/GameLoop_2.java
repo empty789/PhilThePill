@@ -39,7 +39,7 @@ public class GameLoop_2 implements Runnable{
 	  }
 	  
 	  public void draw() {
-		  gPanel.resetMenu();
+		  gPanel.resetButtons();
 		  frames++;
     	  gPanel.draw();
 	  }

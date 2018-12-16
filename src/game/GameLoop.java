@@ -140,7 +140,7 @@ public class GameLoop implements Runnable{
 	  }
 	  
 	  public void draw() {
-		  gPanel.resetMenu();
+		  gPanel.resetButtons();
     	  gPanel.draw();
 	  }
 }

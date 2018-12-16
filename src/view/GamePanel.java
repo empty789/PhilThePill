@@ -3,10 +3,12 @@ package view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.swing.JPanel;
 
@@ -39,10 +41,12 @@ public class GamePanel extends JPanel{
 	
 	private ArrayList<MenuItem> menuList;
 	private ArrayList<MenuItem> answerList;
-	private Font menuFont, uiFont;
+	private Font menuFont, uiFont, answerFont;
 	
 	private int maxW;
 	private int maxH;
+	
+	private Random r;
 	
 	public GamePanel(MainWindow mw, Camera cam, Player player, QuestionManager qm) {
 		this.qm = qm;
@@ -58,12 +62,14 @@ public class GamePanel extends JPanel{
 		maxW = mw.getMaxWidth();
 		maxH = mw.getMaxHeight();
 		
+		r = new Random();
 		//setPreferredSize(new Dimension(MainWindow.WIDTH,MainWindow.HEIGHT));
 		setPreferredSize(new Dimension(maxW, maxH));
-		state = GameState.MENU;
-		//state= GameState.MINIGAME;
+		//state = GameState.MENU;
+		state= GameState.MINIGAME;
 		menuFont = new Font("Arial", Font.BOLD, 60);
 		uiFont = new Font("Arial", Font.BOLD, 30);
+		answerFont = new Font("Arial", Font.ITALIC, 20);
 		
 		//Menu
 		menuList = new ArrayList<MenuItem>();
@@ -78,11 +84,7 @@ public class GamePanel extends JPanel{
 		
 		//answer menu
 		answerList = new ArrayList<MenuItem>();
-		q = qm.nextQuestion();
-		qText = q.getQuestion();
-		a1Text = q.getAnswers().get(0);
-		a2Text = q.getAnswers().get(1);
-		a3Text = q.getAnswers().get(2);
+		setNextQuestion();
 		
 		
 		
@@ -108,15 +110,59 @@ public class GamePanel extends JPanel{
 		return lastState;
 	}
 	
-	public void resetMenu() {
+	public void resetButtons() {
 		for(int i = 0; i < menuList.size(); i++) {
 			menuList.get(i).setVisible(false);
+		}
+		for(int i = 0; i < answerList.size(); i++) {
+			answerList.get(i).setVisible(false);
 		}
 	}
 	
 	public ArrayList<MenuItem> getMenu() {
 		return menuList;
 	}
+	
+	public ArrayList<MenuItem> getAnswerList() {
+		return answerList;
+	}
+	
+	public void setNextQuestion() {
+		q = qm.nextQuestion();
+		qText = q.getQuestion();
+		ArrayList<String> answers = q.getAnswers();
+		
+		boolean foundIt = false;
+		for(int i = 0; i < 3; i++) {
+			int rand = r.nextInt(answers.size());
+			System.out.println(i+ "  "+rand+"  "+answers.size());
+			for(int j = 0; j < answers.size(); j++) {
+				System.out.println(answers.get(j));
+			}
+			if(i == 0) {
+				a1Text = q.getAnswers().get(rand);
+			}else if(i == 1) {
+				a2Text = q.getAnswers().get(rand);
+			}else if(i == 2) {
+				a3Text = q.getAnswers().get(rand);
+			}
+			
+			
+			if(rand == 0 && foundIt == false) {
+				foundIt = true;
+				answerList.add(new MenuItem((int) (maxW*0.2), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "RIGHT"));
+			}else {
+				answerList.add(new MenuItem((int) (maxW*0.2), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "WRONG"));
+			}
+			
+
+			answers.remove(rand);
+			
+		}
+			
+
+	}
+	
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -187,17 +233,45 @@ public class GamePanel extends JPanel{
 			lastState = GameState.MINIGAME;
 			g.setFont(menuFont);
 			g.setColor(Color.WHITE);
-			g.drawString("QUIZ", maxW/2-150, 100);
+			//g.drawString("QUIZ", maxW/2-150, 100);
+			drawCenteredString(g, "QUIZ", new Rectangle(0, 0, maxW, (int) (maxH*0.2)), menuFont);
 			g.setFont(uiFont);
 			
-			g.drawString(qText, maxW/10, 200);
-			
+			//g.drawString(qText, maxW/10, 200);
+			drawCenteredString(g, qText, new Rectangle(0, (int) (maxH*0.1), maxW, (int) (maxH*0.4)), uiFont);
 
+			answerList.get(0).render(g);
+			answerList.get(1).render(g);
+			answerList.get(2).render(g);
+			g.setColor(Color.WHITE);
+			g.setFont(answerFont);
+			g.drawString(a1Text,(int) (maxW*0.2)+40, (int) (maxH*0.4)+23);
+			g.drawString(a2Text,(int) (maxW*0.2)+40, (int) (maxH*0.4)+23+50);
+			g.drawString(a3Text,(int) (maxW*0.2)+40, (int) (maxH*0.4)+23+100);
+		}else if(state == GameState.ARIGHT) {
+			g.setColor(Color.WHITE);
+			drawCenteredString(g, "RICHTIG JUHUUUUUUUUUUUUU!!!!!!!", new Rectangle(0, 0, maxW, maxH), menuFont);
+		}else if(state == GameState.AWRONG) {
+			g.setColor(Color.WHITE);
+			drawCenteredString(g, "FALSCH, WARUM STUDIERST DU EIGENTLICH?!?", new Rectangle(0, 0, maxW, maxH), menuFont);
 		}
 	}
 	
 	public void draw() {
 		repaint();
+	}
+	
+	public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
+	    // Get the FontMetrics
+	    FontMetrics metrics = g.getFontMetrics(font);
+	    // Determine the X coordinate for the text
+	    int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
+	    // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
+	    int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
+	    // Set the font
+	    g.setFont(font);
+	    // Draw the String
+	    g.drawString(text, x, y);
 	}
 
 }

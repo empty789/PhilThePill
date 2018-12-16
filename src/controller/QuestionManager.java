@@ -7,32 +7,34 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Random;
 
 import util.Question;
 
 public class QuestionManager {
 
 	ArrayList<Question> questions;
-	
+	Random r;
 	public QuestionManager() throws FileNotFoundException, IOException {
 		questions = parse();
+		r = new Random();
 		//debug output
-		for(int i = 1; i < questions.size(); i++) {
-			System.out.println("*----------"+i+"------------*");
-			System.out.println(questions.get(i).getId());
-			System.out.println("topic: "+questions.get(i).getTopic());
-			System.out.println("q: "+questions.get(i).getQuestion());
-			System.out.println("a: "+questions.get(i).getAnswers().toString());
-			System.out.println();
-		}
+//		for(int i = 0; i < questions.size(); i++) {
+//			System.out.println("*----------"+i+"------------*");
+//			System.out.println(questions.get(i).getId());
+//			System.out.println("topic: "+questions.get(i).getTopic());
+//			System.out.println("q: "+questions.get(i).getQuestion());
+//			System.out.println("a: "+questions.get(i).getAnswers().toString());
+//			System.out.println();
+//		}
 	}
 
 	public Question nextQuestion() {
-		Question q = questions.get(1);
-		questions.remove(1);
+		int rand = r.nextInt(questions.size());
+		Question q = questions.get(rand);
+		questions.remove(rand);
 		return q;
 	}
 	

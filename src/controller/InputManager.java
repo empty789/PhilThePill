@@ -43,22 +43,39 @@ public class InputManager implements KeyListener, MouseInputListener{
 	@Override
 	public void mousePressed(MouseEvent e) {
 		ArrayList<MenuItem> items = gPanel.getMenu();
+		ArrayList<MenuItem> answers = gPanel.getAnswerList();
 		int mX = e.getX();
 		int mY = e.getY();
 		
+		if(gPanel.getState() == GameState.MENU) {
 		for(int i = 0; i < items.size(); i++) {
 			if(items.get(i).getBounds().contains(mX, mY) && items.get(i).isVisible() == true) {
 				if(items.get(i).getAction().equals("START")) {
 					gPanel.setState(GameState.RUNNING);
+					player.restart();
 				}else if(items.get(i).getAction().equals("EXIT")) {
 					System.exit(0);
 				}else if(items.get(i).getAction().equals("REPLAY")) {
 					player.restart();
 					gPanel.getLevel().resetLevel();
 					gPanel.setState(GameState.MENU);
+				}else if(items.get(i).getAction().equals("MANUAL")) {
+					gPanel.setState(GameState.MANUAL);
 				}
 
-			
+			}
+		}
+		}if(gPanel.getState() == GameState.MINIGAME) {
+			for(int i = 0; i < answers.size(); i++) {
+				if(answers.get(i).getBounds().contains(mX, mY) && answers.get(i).isVisible() == true) {
+					if(answers.get(i).getAction().equals("RIGHT")) {
+						gPanel.setState(GameState.ARIGHT);
+						gPanel.setNextQuestion();
+					}else if(answers.get(i).getAction().equals("WRONG")) {
+						gPanel.setState(GameState.AWRONG);
+						gPanel.setNextQuestion();
+					}
+				}
 			}
 		}
 	}
@@ -74,9 +91,10 @@ public class InputManager implements KeyListener, MouseInputListener{
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		ArrayList<MenuItem> items = gPanel.getMenu();
+		ArrayList<MenuItem> answers = gPanel.getAnswerList();
 		int mX = e.getX();
 		int mY = e.getY();
-		
+
 		for(int i = 0; i < items.size(); i++) {
 			if(items.get(i).getBounds().contains(mX, mY)) {
 				items.get(i).setHover(true);
@@ -84,6 +102,15 @@ public class InputManager implements KeyListener, MouseInputListener{
 				items.get(i).setHover(false);
 			}
 		}
+	
+		for(int i = 0; i < answers.size(); i++) {
+			if(answers.get(i).getBounds().contains(mX, mY)) {
+				answers.get(i).setHover(true);
+			}else {
+				answers.get(i).setHover(false);
+			}
+		}
+		
 	}
 
 
