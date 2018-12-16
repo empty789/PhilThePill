@@ -4,12 +4,15 @@ import java.util.ArrayList;
 
 public class Question {
 	
+	private int id;
 	private String question;
 	private ArrayList<String> answers;
 	private String topic;
+	private boolean correct;
 	
-	public Question(String question, String a1, String a2, String a3, String topic) {
+	public Question(int id, String question, String a1, String a2, String a3, String topic) {
 		super();
+		this.id = id;
 		this.question = question;
 		answers = new ArrayList<String>();
 		answers.add(a1);
@@ -18,6 +21,10 @@ public class Question {
 		this.topic = topic;
 	}
 	
+	public int getId() {
+		return id;
+	}
+
 	public ArrayList<String> getAnswers() {
 		return answers;
 	}

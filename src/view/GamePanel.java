@@ -10,12 +10,14 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import controller.QuestionManager;
 import game.GameState;
 import objects.Object;
 import objects.ObjectType;
 import objects.entities.Player;
 import objects.level.Level;
 import objects.misc.Bullet;
+import util.Question;
 
 public class GamePanel extends JPanel{
 
@@ -29,15 +31,21 @@ public class GamePanel extends JPanel{
 	private Camera cam;
 	private Player player;
 	private Level level;
+	private QuestionManager qm;
 	private GameState state, lastState;
 	
+	private Question q;
+	private String qText, a1Text, a2Text, a3Text;
+	
 	private ArrayList<MenuItem> menuList;
+	private ArrayList<MenuItem> answerList;
 	private Font menuFont, uiFont;
 	
 	private int maxW;
 	private int maxH;
 	
-	public GamePanel(MainWindow mw, Camera cam, Player player) {
+	public GamePanel(MainWindow mw, Camera cam, Player player, QuestionManager qm) {
+		this.qm = qm;
 		this.mw = mw;
 		this.cam = cam;
 		this.player = player;
@@ -53,16 +61,31 @@ public class GamePanel extends JPanel{
 		//setPreferredSize(new Dimension(MainWindow.WIDTH,MainWindow.HEIGHT));
 		setPreferredSize(new Dimension(maxW, maxH));
 		state = GameState.MENU;
+		//state= GameState.MINIGAME;
 		menuFont = new Font("Arial", Font.BOLD, 60);
 		uiFont = new Font("Arial", Font.BOLD, 30);
 		
 		//Menu
 		menuList = new ArrayList<MenuItem>();
 		menuList.add(new MenuItem(maxW/2-150, 100, 300, 100, menuFont, Color.WHITE, "Start", "START"));
-		menuList.add(new MenuItem(maxW/2-150, 225, 300, 100, menuFont, Color.WHITE, "Exit", "EXIT"));
+		menuList.add(new MenuItem(maxW/2-150, 225, 300, 100, menuFont, Color.WHITE, "Manual", "MANUAL"));
+		menuList.add(new MenuItem(maxW/2-150, 350, 300, 100, menuFont, Color.WHITE, "Exit", "EXIT"));
 		
 		//gameover menu
 		menuList.add(new MenuItem(maxW/2-150, 225, 300, 100, menuFont, Color.WHITE, "To Menu", "REPLAY"));
+		
+		
+		
+		//answer menu
+		answerList = new ArrayList<MenuItem>();
+		q = qm.nextQuestion();
+		qText = q.getQuestion();
+		a1Text = q.getAnswers().get(0);
+		a2Text = q.getAnswers().get(1);
+		a3Text = q.getAnswers().get(2);
+		
+		
+		
 	}
 	
 	public void SetLevel(Level level) {
@@ -153,6 +176,7 @@ public class GamePanel extends JPanel{
 		}else if(state == GameState.MENU) {
 			menuList.get(0).render(g);
 			menuList.get(1).render(g);
+			menuList.get(2).render(g);
 			
 		}else if(state == GameState.GAMEOVER) {
 			g.setFont(menuFont);
@@ -164,6 +188,10 @@ public class GamePanel extends JPanel{
 			g.setFont(menuFont);
 			g.setColor(Color.WHITE);
 			g.drawString("QUIZ", maxW/2-150, 100);
+			g.setFont(uiFont);
+			
+			g.drawString(qText, maxW/10, 200);
+			
 
 		}
 	}

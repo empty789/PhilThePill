@@ -1,12 +1,15 @@
 package view;
 
 import java.awt.Color;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
 import controller.InputManager;
 import controller.LevelManager;
+import controller.QuestionManager;
 import game.GameLoop;
 import objects.Object;
 import objects.entities.Player;
@@ -33,6 +36,7 @@ public class MainWindow extends JFrame{
 	private InputManager input;
 	private Camera cam;
 	private LevelManager lm;
+	private QuestionManager qm;
 	
 	public MainWindow() {
 		init();
@@ -45,7 +49,16 @@ public class MainWindow extends JFrame{
 		
 		cam = new Camera(this, 0, 0);
 		player = new Player();
-		gPanel = new GamePanel(this, cam, player);
+		try {
+			qm = new QuestionManager();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		gPanel = new GamePanel(this, cam, player, qm);
 		
 		
 		

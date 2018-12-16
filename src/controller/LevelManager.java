@@ -35,7 +35,7 @@ public class LevelManager {
 		level.add(new Block(0, maxH-40, 2000, 40, Color.GREEN));
 		level.add(new Block(300, maxH-300, 400, 50, Color.BLUE));
 		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));
-		level.add(new Block(1000, maxH-40-300-101, 100, 300, Color.ORANGE));
+		level.add(new Block(1000, maxH-40-300-101, 100, 300, Color.YELLOW));
 		level.add(new Block(1400, maxH-280-40, 100, 280, Color.RED));
 		
 		level.add(new Life(500, 600, 20, 20, Color.RED));

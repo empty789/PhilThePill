@@ -20,8 +20,9 @@ public class QuestionManager {
 	public QuestionManager() throws FileNotFoundException, IOException {
 		questions = parse();
 		//debug output
-		for(int i = 0; i < questions.size(); i++) {
+		for(int i = 1; i < questions.size(); i++) {
 			System.out.println("*----------"+i+"------------*");
+			System.out.println(questions.get(i).getId());
 			System.out.println("topic: "+questions.get(i).getTopic());
 			System.out.println("q: "+questions.get(i).getQuestion());
 			System.out.println("a: "+questions.get(i).getAnswers().toString());
@@ -29,8 +30,27 @@ public class QuestionManager {
 		}
 	}
 
+	public Question nextQuestion() {
+		Question q = questions.get(1);
+		questions.remove(1);
+		return q;
+	}
+	
+	public void reset(){
+		try {
+			questions = parse();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public ArrayList<Question> parse() throws FileNotFoundException, IOException{
 		//get all files in questions directory
+		int id = 1;
 		ArrayList<Question> questions = new ArrayList<Question>();
 		URI url = null;
 		ArrayList<File> fileList = new ArrayList<File>();
@@ -72,7 +92,8 @@ public class QuestionManager {
 			        }else if(numLine == 4) {
 			        	a3 = line;
 			        	numLine = 0;
-			        	questions.add(new Question(question, a1, a2, a3, topic));
+			        	questions.add(new Question(id, question, a1, a2, a3, topic));
+			        	id++;
 			        }
 			        
 			    }
