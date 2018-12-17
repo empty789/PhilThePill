@@ -23,8 +23,7 @@ public class MainWindow extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	public static final String title = "Phil the Pill";
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 720;
+
 	
 	private int maxWidth;
 	private int maxHeight;

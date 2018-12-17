@@ -65,8 +65,8 @@ public class GamePanel extends JPanel{
 		r = new Random();
 		//setPreferredSize(new Dimension(MainWindow.WIDTH,MainWindow.HEIGHT));
 		setPreferredSize(new Dimension(maxW, maxH));
-		//state = GameState.MENU;
-		state= GameState.MINIGAME;
+		state = GameState.MENU;
+		//state= GameState.MINIGAME;
 		menuFont = new Font("Arial", Font.BOLD, 60);
 		uiFont = new Font("Arial", Font.BOLD, 30);
 		answerFont = new Font("Arial", Font.ITALIC, 20);
@@ -135,10 +135,6 @@ public class GamePanel extends JPanel{
 		boolean foundIt = false;
 		for(int i = 0; i < 3; i++) {
 			int rand = r.nextInt(answers.size());
-			System.out.println(i+ "  "+rand+"  "+answers.size());
-			for(int j = 0; j < answers.size(); j++) {
-				System.out.println(answers.get(j));
-			}
 			if(i == 0) {
 				a1Text = q.getAnswers().get(rand);
 			}else if(i == 1) {
