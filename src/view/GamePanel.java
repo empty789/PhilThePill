@@ -59,6 +59,7 @@ public class GamePanel extends JPanel{
 	public void init() {
 		//maxW = MainWindow.WIDTH;
 		//maxH = MainWindow.HEIGHT;
+		
 		maxW = mw.getMaxWidth();
 		maxH = mw.getMaxHeight();
 		
