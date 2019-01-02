@@ -1,16 +1,22 @@
 package controller;
 
 import java.awt.Color;
-
 import java.awt.Point;
+import java.util.ArrayList;
 
 import game.GameLoop;
+import objects.ObjectType;
+import objects.entities.Boss;
 import objects.entities.Enemy;
+import objects.entities.Player;
+import objects.items.EnergyDrink;
 import objects.items.Life;
+import objects.items.Pipe;
 import objects.level.Level;
 import objects.misc.Trigger;
 import objects.obstacles.Block;
 import view.GamePanel;
+import view.LevelItem;
 import view.MainWindow;
 
 public class LevelManager {
@@ -20,6 +26,8 @@ public class LevelManager {
 	private GameLoop gLoop;
 	private GamePanel gPanel;
 	
+	private ArrayList<Level> levelList;
+	
 	private int maxW;
 	private int maxH;
 	
@@ -28,23 +36,125 @@ public class LevelManager {
 		this.gLoop = gLoop;
 		this.gPanel = gPanel;
 		
+		
 		maxW = mw.getMaxWidth();
 		maxH = mw.getMaxHeight();
 		
-		level = new Level(new Point(400, 400));
-		level.add(new Block(0, maxH-40, 2000, 40, Color.GREEN));
+		levelList = new ArrayList<Level>();
+		
+		initLevel1();
+		initLevel2();
+		
+		setLevel(0);
+		gPanel.setCurrentLevel(0);
+		
+	}
+
+	public void initLevel1() {
+		String victory = "Du hast es geschafft, der Kopf ist wieder gesund!";
+		level = new Level(new Point(400, 400), victory, "kopf");
+		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
 		level.add(new Block(300, maxH-300, 400, 50, Color.BLUE));
 		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));
 		level.add(new Block(1000, maxH-40-300-101, 100, 300, Color.YELLOW));
 		level.add(new Block(1400, maxH-280-40, 100, 280, Color.RED));
 		
 		level.add(new Life(500, 600, 20, 20, Color.RED));
+		level.add(new Pipe(800, 600, 20, 20, Color.GREEN));
+		level.add(new EnergyDrink(1200, maxH-40-60, 20, 20, Color.YELLOW));
 		level.add(new Enemy(1200, maxH-40-100, 80, 80));
 		
-		level.addTrigger(new Trigger(1700, 0, 100, maxH));
+		//boss
+		level.add(new Block(2000, maxH-40-1000, 100, 800, Color.GREEN));
 		
-		//todo: lm in jede klasse, getters hinzufügen
-		gLoop.SetLevel(level);
-		gPanel.SetLevel(level);
+		level.addTrigger(new Trigger(2100, maxH-40-200, 100, 200, Color.GREEN,ObjectType.BLOCKTRIGGER));
+		
+		level.add(new Block(2000, 0, 1400, 100, Color.GREEN));
+		level.add(new Block(3000, 0, 100, maxH, Color.GREEN));
+		
+		level.add(new Boss(2775, maxH-50-500, 200, 200));
+		
+		level.addTrigger(new Trigger(1700, 0, 100, maxH, Color.GREEN,ObjectType.QUESTTRIGGER));
+		
+		levelList.add(level);
+	}
+	
+	public void initLevel2() {
+		String victory = "";
+		level = new Level(new Point(400, 400), victory, "herz");
+		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
+		level.add(new Block(300, maxH-500, 400, 50, Color.BLUE));
+		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));
+		level.add(new Block(1000, maxH-40-300-101, 100, 300, Color.YELLOW));
+		level.add(new Block(1400, maxH-280-40, 100, 280, Color.RED));
+		
+		level.add(new Life(500, 600, 20, 20, Color.RED));
+		level.add(new Pipe(800, 600, 20, 20, Color.GREEN));
+		level.add(new Enemy(1200, maxH-40-100, 80, 80));
+		
+		//boss
+		level.add(new Block(2000, maxH-40-1100, 100, 900, Color.GREEN));
+		level.add(new Block(2000, 0, 1400, 100, Color.GREEN));
+		level.add(new Block(3000, 0, 100, maxH, Color.GREEN));
+		
+		level.add(new Boss(2775, maxH-50-500, 200, 200));
+		
+		level.addTrigger(new Trigger(1700, 0, 100, maxH, Color.GREEN, ObjectType.QUESTTRIGGER));
+		
+		levelList.add(level);
+	}
+	
+	public void initLevel3() {
+		String victory = "";
+		level = new Level(new Point(400, 400), victory, "magen");
+		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
+		level.add(new Block(300, maxH-500, 400, 50, Color.BLUE));
+		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));
+		level.add(new Block(1000, maxH-40-300-101, 100, 300, Color.YELLOW));
+		level.add(new Block(1400, maxH-280-40, 100, 280, Color.RED));
+		
+		level.add(new Life(500, 600, 20, 20, Color.RED));
+		level.add(new Pipe(800, 600, 20, 20, Color.GREEN));
+		level.add(new Enemy(1200, maxH-40-100, 80, 80));
+		
+		//boss
+		level.add(new Block(2000, maxH-40-1100, 100, 900, Color.GREEN));
+		level.add(new Block(2000, 0, 1400, 100, Color.GREEN));
+		level.add(new Block(3000, 0, 100, maxH, Color.GREEN));
+		
+		level.add(new Boss(2775, maxH-50-500, 200, 200));
+		
+		level.addTrigger(new Trigger(1700, 0, 100, maxH, Color.GREEN, ObjectType.QUESTTRIGGER));
+		
+		levelList.add(level);
+	}
+	
+	public void initLevel4() {
+		String victory = "";
+		level = new Level(new Point(400, 400), victory, "leber");
+		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
+		level.add(new Block(300, maxH-500, 400, 50, Color.BLUE));
+		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));
+		level.add(new Block(1000, maxH-40-300-101, 100, 300, Color.YELLOW));
+		level.add(new Block(1400, maxH-280-40, 100, 280, Color.RED));
+		
+		level.add(new Life(500, 600, 20, 20, Color.RED));
+		level.add(new Pipe(800, 600, 20, 20, Color.GREEN));
+		level.add(new Enemy(1200, maxH-40-100, 80, 80));
+		
+		//boss
+		level.add(new Block(2000, maxH-40-1100, 100, 900, Color.GREEN));
+		level.add(new Block(2000, 0, 1400, 100, Color.GREEN));
+		level.add(new Block(3000, 0, 100, maxH, Color.GREEN));
+		
+		level.add(new Boss(2775, maxH-50-500, 200, 200));
+		
+		level.addTrigger(new Trigger(1700, 0, 100, maxH, Color.GREEN, ObjectType.QUESTTRIGGER));
+		
+		levelList.add(level);
+	}
+	public void setLevel(int num) {
+		gLoop.SetLevel(levelList.get(num));
+		gPanel.SetLevel(levelList.get(num));
 	}
 }

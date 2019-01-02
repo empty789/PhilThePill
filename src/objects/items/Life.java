@@ -30,7 +30,7 @@ public class Life extends Object{
 		}else {
 			if(flow < 90) {
 				g.setColor(getColor());
-				g.drawString("+1 LIFE", getX(), getY()+30-flow);
+				g.drawString("+1 Leben", getX(), getY()+30-flow);
 				flow+=3;
 			}
 		}

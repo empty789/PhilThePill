@@ -12,7 +12,9 @@ import javax.imageio.ImageIO;
 
 import objects.Object;
 import objects.ObjectType;
+import objects.items.EnergyDrink;
 import objects.items.Life;
+import objects.items.Pipe;
 import objects.misc.Bullet;
 
 public class Player extends Object {
@@ -25,7 +27,7 @@ public class Player extends Object {
 	private final float MAX_VEL = 10;
 
 	
-	private int lifes;
+	private int lifes, pipes;
 	private boolean big;
 	private boolean immune;
 	private int immuneTime;
@@ -48,10 +50,11 @@ public class Player extends Object {
 		
 		
 		lifes = 3;
+		pipes = 0;
 		big = true;
 		immune = false;
 		immuneTime = 0; 
-		bullet = new Bullet(ObjectType.PLAYER, 400);
+		bullet = new Bullet(ObjectType.PLAYER, 10, 700);
 		images = new ArrayList<BufferedImage>(); // idle, left, l_fall, l_jump, right, r_fall, r_jump
 		for(int i = 0; i < 7; i++) {
 			try {
@@ -185,7 +188,23 @@ public class Player extends Object {
 					l.setAlive(false);
 				}
 			}
-			
+			//pipe
+			if(getBox().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.PIPE) {
+				Pipe p = (Pipe) obj.get(i);
+				if(p.isAlive()) {
+					setPipes(getPipes()+1);
+					p.setAlive(false);
+				}
+			}
+			//Energy
+			if(getBox().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.ENERGYDRINK) {
+				EnergyDrink e = (EnergyDrink) obj.get(i);
+				if(e.isAlive()) {
+					big = true;
+					setY(getY()+25);
+					e.setAlive(false);
+				}
+			}
 
 			
 			
@@ -196,30 +215,11 @@ public class Player extends Object {
 					if(getBounds().intersects(e.getBoundsTop())) {
 						e.setAlive(false);
 					}else if(getBoundsRight().intersects(e.getBox())) {
-						if(big) {
-							big = false;
-							immune = true;
-						}else {
-							respawn();
-							setLifes(getLifes()-1);
-						}
-						
+						getDamage();	
 					}else if(getBoundsLeft().intersects(e.getBox())) {
-						if(big) {
-							big = false;
-							immune = true;
-						}else {
-							respawn();
-							setLifes(getLifes()-1);
-						}
+						getDamage();
 					}else if(getBoundsTop().intersects(e.getBox())) {
-						if(big) {
-							big = false;
-							immune = true;
-						}else {
-							respawn();
-							setLifes(getLifes()-1);
-						}
+						getDamage();
 					}
 				}
 			}
@@ -228,12 +228,22 @@ public class Player extends Object {
 			if(bullet.isAlive() ) {
 				if(obj.get(i).getType() == ObjectType.OBSTACLE && bullet.getBounds().intersects(obj.get(i).getBounds())) {
 					bullet.setAlive(false);
+					bullet.resetRange();
 				}else if(obj.get(i).getType() == ObjectType.ENTITY){
 					Enemy e = (Enemy)obj.get(i);
 					if(e.isAlive() && bullet.getBounds().intersects(e.getBox())) {
 						e.setAlive(false);
+						bullet.setAlive(false);
+						bullet.resetRange();
 					}
 					
+				}else if(obj.get(i).getType() == ObjectType.BOSS){
+					Boss b = (Boss)obj.get(i);
+					if(b.isAlive() && bullet.getBounds().intersects(b.getBox())) {
+						bullet.setAlive(false);
+						bullet.resetRange();
+						b.setHitpoints(b.getHitpoints()-bullet.getDmg());
+					}
 				}
 			}
 			
@@ -242,21 +252,24 @@ public class Player extends Object {
 	}
 	
 	public void restart() {
-		velX = 0;
-		velY = 0;
-		left = false;
-		right = false;
-		up = false;
 		big = true;
-		falling = true;
-		jumping = false;
 		respawn();
 		setLifes(3);
 	}
 	
 	public void respawn() {
-		setX(spawn.x);
-		setY(spawn.y);
+		setPosition(spawn);
+		resetMovement();
+	}
+	
+	public void resetMovement() {
+		velX = 0;
+		velY = 0;
+		left = false;
+		right = false;
+		up = false;
+		falling = true;
+		jumping = false;
 	}
 	
 	public void shoot() {
@@ -264,18 +277,31 @@ public class Player extends Object {
 			if(right) {
 				bullet.setX(getX()+50);
 				bullet.setY(getY()+20);
-				bullet.setVelX(10.0f);
+				bullet.setVelX(Math.abs(bullet.getVelX()));
 				bullet.setStart(new Point(bullet.getX(), bullet.getY()));
 				bullet.setAlive(true);
 			}else if(left) {
 				bullet.setX(getX());
 				bullet.setY(getY()+20);
-				bullet.setVelX(-10.0f);
+				bullet.setVelX(Math.abs(bullet.getVelX())*-1);
 				bullet.setStart(new Point(bullet.getX(), bullet.getY()));
 				bullet.setAlive(true);	
 			}
 			
 			
+		}
+	}
+	
+	public boolean getDamage() {
+		if(big) {
+			big = false;
+			immune = true;
+			falling = true;
+			return false;
+		}else {
+			respawn();
+			setLifes(getLifes()-1);
+			return true;
 		}
 	}
 	
@@ -299,7 +325,13 @@ public class Player extends Object {
 		return new Rectangle(getX(), getY()+5, 5, getHeight()-20);
 	}
 	
-
+	public Point getPosition() {
+		return new Point(getX(), getY());
+	}
+	
+	public Point getCenterPosition() {
+		return new Point(getX()+getWidth()/2, getY()+getHeight()/2);
+	}
 	
 	public int getLifes() {
 		return lifes;
@@ -308,6 +340,17 @@ public class Player extends Object {
 
 	public void setLifes(int lifes) {
 		this.lifes = lifes;
+	}
+
+	
+	
+	public int getPipes() {
+		return pipes;
+	}
+
+
+	public void setPipes(int pipes) {
+		this.pipes = pipes;
 	}
 
 
@@ -338,6 +381,16 @@ public class Player extends Object {
 
 	public Bullet getBullet() {
 		return bullet;
+	}
+
+
+	public Point getSpawn() {
+		return spawn;
+	}
+
+
+	public void setSpawn(Point spawn) {
+		this.spawn = spawn;
 	}
 	
 	

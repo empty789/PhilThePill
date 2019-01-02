@@ -2,6 +2,7 @@ package objects;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 public class Object {
@@ -76,7 +77,10 @@ public class Object {
 	public void setColor(Color color) {
 		this.color = color;
 	}
-
+	public void setPosition(Point p) {
+		x = p.x;
+		y= p.y;
+	}
 	
 	
 }

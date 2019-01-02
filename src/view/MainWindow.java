@@ -59,19 +59,19 @@ public class MainWindow extends JFrame{
 		}
 		gPanel = new GamePanel(this, cam, player, qm);
 		
+		gLoop = new GameLoop(this, gPanel, player, cam);
 		
+		lm = new LevelManager(this, gLoop, gPanel);
 		
-		
-		
-		input = new InputManager(player, gPanel);
+		input = new InputManager(player, gPanel, lm);
 		gPanel.setDoubleBuffered(true);
 		gPanel.addMouseListener(input);
 		gPanel.addMouseMotionListener(input);
 		gPanel.addKeyListener(input);
 		
-		gLoop = new GameLoop(this, gPanel, player, cam);
 		
-		lm = new LevelManager(this, gLoop, gPanel);
+		
+		
 		
 		setTitle(title);
 		setContentPane(gPanel);

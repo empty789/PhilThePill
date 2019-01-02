@@ -10,14 +10,15 @@ public class Bullet extends Object{
 	private Boolean isAlive;
 	private float velX;
 	private Point start;
-	private int range;
+	private int range, rangeDecay, dmg;
 
 	
-	public Bullet(ObjectType owner, int range) {
+	public Bullet(ObjectType owner, int dmg, int range) {
 		setWidth(20);
 		setHeight(10);
 		this.owner = owner;
 		this.range = range;
+		this.dmg = dmg;
 		velX = 10.0f;
 		isAlive = false;
 		setType(ObjectType.BULLET);
@@ -25,18 +26,28 @@ public class Bullet extends Object{
 	
 	
 	public void move() {
-		setX((int) (getX()+velX));
 		
-		//range decay
-		if(velX > 0) {
-			if(getX() >= start.getX() + range) {
-				isAlive = false;
-			}
-		}else if(velX < 0) {
-			if(getX() <= start.getX()-range) {
-				isAlive = false;
-			}
+		
+		if(rangeDecay > 0) {
+			setX((int) (getX()+velX));
+			
+			rangeDecay -=Math.abs(velX);
+		}else {
+			isAlive = false;
+			rangeDecay = range;
 		}
+		
+		
+//		//range decay
+//		if(velX > 0) {
+//			if(getX() >= start.getX() + range) {
+//				isAlive = false;
+//			}
+//		}else if(velX < 0) {
+//			if(getX() <= start.getX()-range) {
+//				isAlive = false;
+//			}
+//		}
 	}
 
 
@@ -49,6 +60,9 @@ public class Bullet extends Object{
 		this.isAlive = isAlive;
 	}
 
+	public void resetRange() {
+		rangeDecay = range;
+	}
 
 	public ObjectType getOwner() {
 		return owner;
@@ -60,6 +74,12 @@ public class Bullet extends Object{
 	}
 
 
+	
+	public float getVelX() {
+		return velX;
+	}
+
+
 	public Point getStart() {
 		return start;
 	}
@@ -67,6 +87,16 @@ public class Bullet extends Object{
 
 	public void setStart(Point start) {
 		this.start = start;
+	}
+
+
+	public int getDmg() {
+		return dmg;
+	}
+
+
+	public void setDmg(int dmg) {
+		this.dmg = dmg;
 	}
 	
 	

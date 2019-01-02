@@ -31,9 +31,15 @@ public class QuestionManager {
 //		}
 	}
 
-	public Question nextQuestion() {
+	public Question nextQuestion(String topic) {
 		int rand = r.nextInt(questions.size());
 		Question q = questions.get(rand);
+
+		while(!q.getTopic().equals(topic)) {
+			rand = r.nextInt(questions.size());
+			q = questions.get(rand);
+		}
+		System.out.println(q.getTopic());
 		questions.remove(rand);
 		return q;
 	}

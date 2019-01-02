@@ -1,13 +1,17 @@
 package game;
 
+import java.awt.Color;
+import java.awt.Point;
 import java.util.ArrayList;
 
-import objects.Object;
 import objects.ObjectType;
+import objects.entities.Boss;
 import objects.entities.Enemy;
 import objects.entities.Player;
 import objects.level.Level;
+import objects.misc.AdvancedBullet;
 import objects.misc.Trigger;
+import objects.obstacles.Block;
 import view.Camera;
 import view.GamePanel;
 import view.MainWindow;
@@ -53,21 +57,52 @@ public class GameLoop implements Runnable{
 	    	Level lvl = gPanel.getLevel();
 			ArrayList<Enemy> enemys = lvl.getEnemys();
 			ArrayList<Trigger> trigger = lvl.getTriggerList();
+			Boss b = lvl.getBoss();
 			
+			//enemys
 			for(int i = 0; i < enemys.size(); i++) {
 				enemys.get(i).move();
 				enemys.get(i).tick(level.getObjects());
 			}
 			
+			//trigger
 			for(int i = 0; i < trigger.size(); i++) {
 				Trigger tr = trigger.get(i);
 				if(tr.isAlive()) {
-					if(player.getBox().intersects(tr.getBounds()) && tr.getType() == ObjectType.QUESTTRIGGER) {
-						gPanel.setState(GameState.MINIGAME);
-						tr.setAlive(false);
+					if(player.getBox().intersects(tr.getBounds())) {
+						if(tr.getType() == ObjectType.QUESTTRIGGER) {
+							gPanel.setNextQuestion();
+							gPanel.setState(GameState.MINIGAME);
+							tr.setAlive(false);
+						}else if(tr.getType() == ObjectType.BLOCKTRIGGER) {
+							Block block = new Block(tr.getX()-tr.getWidth(), tr.getY(), tr.getWidth(), tr.getHeight(), tr.getColor());
+							level.add(block);
+							if(player.getBounds().intersects(block.getBounds())) {
+								player.setX(player.getX()+block.getWidth()/2);
+							}
+							level.addTrigger(new Trigger(tr.getX()-tr.getWidth()*2, tr.getY()+tr.getHeight()-10, tr.getWidth(), 10, Color.RED, ObjectType.TELEPORTTRIGGER, new Point(tr.getX()+tr.getWidth()/2, tr.getY())));
+							tr.setAlive(false);
+						}else if(tr.getType() == ObjectType.TELEPORTTRIGGER) {
+							player.setPosition(tr.getTpPoint());
+						}
 					}
 				}
 			}
+			
+			//boss
+			b.move();
+			b.tick(level.getObjects(), player);
+			ArrayList<AdvancedBullet> bulletList = b.getBulletList();
+			for(int i = 0; i < bulletList.size(); i++) {
+				bulletList.get(i).move();
+			}
+			
+			if(b.getHitpoints() <= 0) {
+				b.setAlive(true);
+				gPanel.setState(GameState.VICTORY);
+				gPanel.setCurrentLevel(gPanel.getCurrentLevel()+1);
+			}
+			
 		}
 		
     	//world collision check

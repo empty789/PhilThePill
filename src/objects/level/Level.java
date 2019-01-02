@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import objects.Object;
 import objects.ObjectType;
+import objects.entities.Boss;
 import objects.entities.Enemy;
 import objects.items.Life;
 import objects.misc.Trigger;
@@ -18,13 +19,18 @@ public class Level {
 	ArrayList<Object> objList, defaultObj;
 	ArrayList<Trigger> triggerList, defaultTrigger;
 	Point startPoint;
+	String vicMsg;
+	String topic;
+
 	
-	public Level(Point startPoint) {
+	public Level(Point startPoint, String vicMsg, String topic) {
 		objList = new ArrayList<Object>();
 		defaultObj = new ArrayList<Object>();
 		triggerList = new ArrayList<Trigger>();
 		defaultTrigger = new ArrayList<Trigger>();
 		this.startPoint = startPoint;
+		this.vicMsg = vicMsg;
+		this.topic = topic;
 		
 	}
 	
@@ -40,6 +46,14 @@ public class Level {
 //		
 //	}
 	
+	public Point getStartPoint() {
+		return startPoint;
+	}
+	
+	public String getTopic() {
+		return topic;
+	}
+
 	public void add(Object obj) {
 		objList.add(obj);
 		Object dObject = null;
@@ -83,6 +97,23 @@ public class Level {
 		return eList;
 	}
 	
+	public Boss getBoss() {
+		Boss res = null;
+		for(int i = 0; i < objList.size(); i++) {
+			if(objList.get(i).getType() == ObjectType.BOSS) {
+				res = (Boss) objList.get(i);
+			}
+		}
+		return res;
+	}
+	
+	
+	
+
+	public String getVicMsg() {
+		return vicMsg;
+	}
+
 	public void resetLevel() {
 		objList = defaultObj;
 	}

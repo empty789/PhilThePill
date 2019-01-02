@@ -1,6 +1,5 @@
 package controller;
 
-import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -11,17 +10,20 @@ import javax.swing.event.MouseInputListener;
 import game.GameState;
 import objects.entities.Player;
 import view.GamePanel;
+import view.LevelItem;
 import view.MenuItem;
 
 public class InputManager implements KeyListener, MouseInputListener{
 
 	private Player player;
 	private GamePanel gPanel;
+	private LevelManager lvlManager;
 	private int keys;
 	
-	public InputManager(Player player, GamePanel gPanel) {
+	public InputManager(Player player, GamePanel gPanel, LevelManager lvlManager) {
 		this.player = player;
 		this.gPanel = gPanel;
+		this.lvlManager = lvlManager;
 		keys = 0;
 	}
 	
@@ -44,28 +46,40 @@ public class InputManager implements KeyListener, MouseInputListener{
 	public void mousePressed(MouseEvent e) {
 		ArrayList<MenuItem> items = gPanel.getMenu();
 		ArrayList<MenuItem> answers = gPanel.getAnswerList();
+		ArrayList<LevelItem> lvls = gPanel.getLvlMenuList();
 		int mX = e.getX();
 		int mY = e.getY();
 		
-		if(gPanel.getState() == GameState.MENU) {
-		for(int i = 0; i < items.size(); i++) {
-			if(items.get(i).getBounds().contains(mX, mY) && items.get(i).isVisible() == true) {
-				if(items.get(i).getAction().equals("START")) {
-					gPanel.setState(GameState.RUNNING);
-					player.restart();
-				}else if(items.get(i).getAction().equals("EXIT")) {
-					System.exit(0);
-				}else if(items.get(i).getAction().equals("REPLAY")) {
-					player.restart();
-					gPanel.getLevel().resetLevel();
-					gPanel.setState(GameState.MENU);
-				}else if(items.get(i).getAction().equals("MANUAL")) {
-					gPanel.setState(GameState.MANUAL);
+		if(gPanel.getState() == GameState.MENU || gPanel.getState() == GameState.PAUSE || gPanel.getState() == GameState.VICTORY || gPanel.getState() == GameState.ARIGHT || gPanel.getState() == GameState.AWRONG) {
+			for(int i = 0; i < items.size(); i++) {
+				if(items.get(i).getBounds().contains(mX, mY) && items.get(i).isVisible() == true) {
+					if(items.get(i).getAction().equals("START")) {
+						gPanel.setState(GameState.LEVELOVERVIEW);
+						player.restart();
+					}else if(items.get(i).getAction().equals("EXIT")) {
+						System.exit(0);
+					}else if(items.get(i).getAction().equals("REPLAY")) {
+						player.restart();
+						gPanel.getLevel().resetLevel();
+						gPanel.setState(GameState.MENU);
+					}else if(items.get(i).getAction().equals("MANUAL")) {
+						gPanel.setState(GameState.MANUAL);
+					}else if(items.get(i).getAction().equals("VICTORY")) {
+						gPanel.setState(GameState.LEVELOVERVIEW);
+						keys = 0;
+					}else if(items.get(i).getAction().equals("RIGHT") || items.get(i).getAction().equals("WRONG")) {
+						if(items.get(i).getAction().equals("WRONG"))
+							player.setLifes(player.getLifes()-1);
+						gPanel.setState(GameState.RUNNING);
+						keys = 0;
+						player.resetMovement();
+					}
+	
 				}
-
 			}
 		}
-		}if(gPanel.getState() == GameState.MINIGAME) {
+		
+		if(gPanel.getState() == GameState.MINIGAME) {
 			for(int i = 0; i < answers.size(); i++) {
 				if(answers.get(i).getBounds().contains(mX, mY) && answers.get(i).isVisible() == true) {
 					if(answers.get(i).getAction().equals("RIGHT")) {
@@ -74,6 +88,28 @@ public class InputManager implements KeyListener, MouseInputListener{
 					}else if(answers.get(i).getAction().equals("WRONG")) {
 						gPanel.setState(GameState.AWRONG);
 						gPanel.setNextQuestion();
+					}
+				}
+			}
+		}
+		
+		if(gPanel.getState() == GameState.LEVELOVERVIEW) {
+			for(int i = 0; i < lvls.size(); i++) {
+				if(lvls.get(i).getBounds().contains(mX, mY) && lvls.get(i).isVisible() == true) {
+					if(lvls.get(i).getAction().equals("KOPF") && lvls.get(i).isActive()) {
+						gPanel.setState(GameState.RUNNING);
+						lvlManager.setLevel(0);
+					}else if(lvls.get(i).getAction().equals("HERZ") && lvls.get(i).isActive()) {
+						gPanel.setState(GameState.RUNNING);
+						lvlManager.setLevel(1);
+					}
+					else if(lvls.get(i).getAction().equals("LEBER") && lvls.get(i).isActive()) {
+						gPanel.setState(GameState.RUNNING);
+						lvlManager.setLevel(2);
+					}
+					else if(lvls.get(i).getAction().equals("MAGEN") && lvls.get(i).isActive()) {
+						gPanel.setState(GameState.RUNNING);
+						lvlManager.setLevel(3);
 					}
 				}
 			}
@@ -92,11 +128,13 @@ public class InputManager implements KeyListener, MouseInputListener{
 	public void mouseMoved(MouseEvent e) {
 		ArrayList<MenuItem> items = gPanel.getMenu();
 		ArrayList<MenuItem> answers = gPanel.getAnswerList();
+		ArrayList<LevelItem> lvls = gPanel.getLvlMenuList();
+		
 		int mX = e.getX();
 		int mY = e.getY();
 
 		for(int i = 0; i < items.size(); i++) {
-			if(items.get(i).getBounds().contains(mX, mY)) {
+			if(items.get(i).getBounds().contains(mX, mY) && items.get(i).isVisible()) {
 				items.get(i).setHover(true);
 			}else {
 				items.get(i).setHover(false);
@@ -104,10 +142,18 @@ public class InputManager implements KeyListener, MouseInputListener{
 		}
 	
 		for(int i = 0; i < answers.size(); i++) {
-			if(answers.get(i).getBounds().contains(mX, mY)) {
+			if(answers.get(i).getBounds().contains(mX, mY)  && answers.get(i).isVisible()) {
 				answers.get(i).setHover(true);
 			}else {
 				answers.get(i).setHover(false);
+			}
+		}
+		
+		for(int i = 0; i < lvls.size(); i++) {
+			if(lvls.get(i).getBounds().contains(mX, mY)  && lvls.get(i).isVisible()) {
+				lvls.get(i).setHover(true);
+			}else {
+				lvls.get(i).setHover(false);
 			}
 		}
 		
@@ -142,9 +188,9 @@ public class InputManager implements KeyListener, MouseInputListener{
 			}
 			
 		}
-		if(e.getKeyCode() == 27 && gPanel.getState() != GameState.MENU) {
-			gPanel.setState(GameState.MENU);
-		}else if(e.getKeyCode() == 27 && gPanel.getState() == GameState.MENU){
+		if(e.getKeyCode() == 27 && gPanel.getState() != GameState.PAUSE && gPanel.getState() != GameState.MENU) {
+			gPanel.setState(GameState.PAUSE);
+		}else if(e.getKeyCode() == 27 && gPanel.getState() == GameState.PAUSE){
 			gPanel.setState(gPanel.getLastState());
 		}
 	}
