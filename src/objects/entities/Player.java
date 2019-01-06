@@ -54,7 +54,7 @@ public class Player extends Object {
 		big = true;
 		immune = false;
 		immuneTime = 0; 
-		bullet = new Bullet(ObjectType.PLAYER, 10, 700);
+		bullet = new Bullet(ObjectType.PLAYER, 100, 700);
 		images = new ArrayList<BufferedImage>(); // idle, left, l_fall, l_jump, right, r_fall, r_jump
 		for(int i = 0; i < 7; i++) {
 			try {

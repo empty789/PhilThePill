@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import controller.LevelManager;
 import objects.ObjectType;
 import objects.entities.Boss;
 import objects.entities.Enemy;
@@ -24,14 +25,15 @@ public class GameLoop implements Runnable{
 	private GamePanel gPanel;
 	private Player player;
 	private Camera cam;
-
+	private LevelManager lm;
 	private Level level;
 	
-	public GameLoop  (MainWindow mw, GamePanel gPanel, Player player, Camera cam) {
+	public GameLoop  (MainWindow mw, GamePanel gPanel, Player player, Camera cam, LevelManager lm) {
 		this.mw = mw;
 		this.gPanel = gPanel;
 		this.player = player;
 		this.cam = cam;
+		this.lm = lm;
 		start();
 	  }
 	
@@ -49,6 +51,8 @@ public class GameLoop implements Runnable{
     private void tick() {
     	//System.out.println(gPanel.getState());
     	//main tick method while game is running
+    	level = lm.getLevel(gPanel.getCurrentLevel());
+    	
     	if(gPanel.getState() == GameState.RUNNING) {
 			player.tick(level.getObjects());
 			player.move();
@@ -100,7 +104,6 @@ public class GameLoop implements Runnable{
 			if(b.getHitpoints() <= 0) {
 				b.setAlive(true);
 				gPanel.setState(GameState.VICTORY);
-				gPanel.setCurrentLevel(gPanel.getCurrentLevel()+1);
 			}
 			
 		}

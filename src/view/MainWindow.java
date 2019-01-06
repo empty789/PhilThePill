@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import controller.InputManager;
 import controller.LevelManager;
 import controller.QuestionManager;
+import controller.ResourceManager;
 import game.GameLoop;
 import objects.Object;
 import objects.entities.Player;
@@ -36,6 +37,7 @@ public class MainWindow extends JFrame{
 	private Camera cam;
 	private LevelManager lm;
 	private QuestionManager qm;
+	private ResourceManager resM;
 	
 	public MainWindow() {
 		init();
@@ -57,18 +59,26 @@ public class MainWindow extends JFrame{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		gPanel = new GamePanel(this, cam, player, qm);
+		lm = new LevelManager(this);
+		try {
+			resM = new ResourceManager(lm);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		gPanel = new GamePanel(this, cam, player, qm, lm, resM);
 		
-		gLoop = new GameLoop(this, gPanel, player, cam);
+		gLoop = new GameLoop(this, gPanel, player, cam, lm);
 		
-		lm = new LevelManager(this, gLoop, gPanel);
+		
+		
+
 		
 		input = new InputManager(player, gPanel, lm);
 		gPanel.setDoubleBuffered(true);
 		gPanel.addMouseListener(input);
 		gPanel.addMouseMotionListener(input);
 		gPanel.addKeyListener(input);
-		
 		
 		
 		

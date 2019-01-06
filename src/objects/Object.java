@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 public class Object {
 
 	private int x, y, width, height;
 	private ObjectType type;
 	private Color color;
+	private BufferedImage image;
 	
 	public Object() {
 		x  = 0;
@@ -18,6 +20,7 @@ public class Object {
 		height = 0;
 		type = ObjectType.UNDEFINED;
 		color = Color.BLACK;
+		image = null;
 	}
 	
 	public Rectangle getBounds() {
@@ -37,8 +40,13 @@ public class Object {
 	}
 	
 	public void render(Graphics g) {
-		g.setColor(color);
-		g.fillRect(x, y, width, height);
+		
+		if(image != null) {
+			g.drawImage(image, x, y, width, height, null);
+		}else {
+			g.setColor(color);
+			g.fillRect(x, y, width, height);
+		}
 	}
 	
 	public int getX() {
@@ -80,6 +88,14 @@ public class Object {
 	public void setPosition(Point p) {
 		x = p.x;
 		y= p.y;
+	}
+
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+
+	public BufferedImage getImage() {
+		return image;
 	}
 	
 	

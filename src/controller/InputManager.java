@@ -65,6 +65,7 @@ public class InputManager implements KeyListener, MouseInputListener{
 					}else if(items.get(i).getAction().equals("MANUAL")) {
 						gPanel.setState(GameState.MANUAL);
 					}else if(items.get(i).getAction().equals("VICTORY")) {
+						gPanel.setCurrentLevel(gPanel.getCurrentLevel()+1);
 						gPanel.setState(GameState.LEVELOVERVIEW);
 						keys = 0;
 					}else if(items.get(i).getAction().equals("RIGHT") || items.get(i).getAction().equals("WRONG")) {
@@ -98,18 +99,18 @@ public class InputManager implements KeyListener, MouseInputListener{
 				if(lvls.get(i).getBounds().contains(mX, mY) && lvls.get(i).isVisible() == true) {
 					if(lvls.get(i).getAction().equals("KOPF") && lvls.get(i).isActive()) {
 						gPanel.setState(GameState.RUNNING);
-						lvlManager.setLevel(0);
+						gPanel.setCurrentLevel(0);
 					}else if(lvls.get(i).getAction().equals("HERZ") && lvls.get(i).isActive()) {
 						gPanel.setState(GameState.RUNNING);
-						lvlManager.setLevel(1);
+						gPanel.setCurrentLevel(1);
 					}
 					else if(lvls.get(i).getAction().equals("LEBER") && lvls.get(i).isActive()) {
 						gPanel.setState(GameState.RUNNING);
-						lvlManager.setLevel(2);
+						gPanel.setCurrentLevel(2);
 					}
 					else if(lvls.get(i).getAction().equals("MAGEN") && lvls.get(i).isActive()) {
 						gPanel.setState(GameState.RUNNING);
-						lvlManager.setLevel(3);
+						gPanel.setCurrentLevel(3);
 					}
 				}
 			}

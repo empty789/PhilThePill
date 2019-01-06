@@ -15,12 +15,12 @@ import objects.obstacles.Block;
 public class Level {
 
 
-	BufferedImage bg;
-	ArrayList<Object> objList, defaultObj;
-	ArrayList<Trigger> triggerList, defaultTrigger;
-	Point startPoint;
-	String vicMsg;
-	String topic;
+	private BufferedImage bg;
+	private ArrayList<Object> objList, defaultObj;
+	private ArrayList<Trigger> triggerList, defaultTrigger;
+	private Point startPoint;
+	private String vicMsg;
+	private String topic;
 
 	
 	public Level(Point startPoint, String vicMsg, String topic) {
@@ -34,18 +34,20 @@ public class Level {
 		
 	}
 	
-//	public void render(Graphics g) {
-//		if(bg != null) {
-//			g.drawImage(bg, 0, 0, MainWindow.WIDTH, MainWindow.HEIGHT, null);
-//		}else {
-//			g.setColor(Color.GREEN.brighter().brighter());
-//			g.fillRect(0, 0, MainWindow.WIDTH, MainWindow.HEIGHT);
-//			
-//		}
-//		
-//		
-//	}
 	
+	
+	public BufferedImage getBg() {
+		return bg;
+	}
+
+
+
+	public void setBg(BufferedImage bg) {
+		this.bg = bg;
+	}
+
+
+
 	public Point getStartPoint() {
 		return startPoint;
 	}

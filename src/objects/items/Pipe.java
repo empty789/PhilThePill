@@ -25,8 +25,12 @@ public class Pipe extends Object{
 	
 	public void render(Graphics g) {
 		if(isAlive) {
-			g.setColor(getColor());
-			g.fillRect(getX(), getY(), getWidth(), getHeight());
+			if(getImage() != null) {
+				g.drawImage(getImage(), getX(), getY(), getWidth(), getHeight(), null);
+			}else {
+				g.setColor(getColor());
+				g.fillRect(getX(), getY(), getWidth(), getHeight());
+			}
 		}else {
 			if(flow < 90) {
 				g.setColor(getColor());

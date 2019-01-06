@@ -16,16 +16,16 @@ public class LevelItem {
 
 	
 	private int x, y, width, height;
-	private boolean hover, visible, active;
+	private boolean hover, visible, active, done;
 	private Font font;
 	private Color c;
 	private String title;
 	private String action;
-	private BufferedImage phil;
+	private BufferedImage phil, doneIcon, icon;
 	private int tick;
 
 	
-	public LevelItem(int x, int y, int width, int height, Font font, Color c, String title, String action) {
+	public LevelItem(int x, int y, int width, int height, Font font, Color c, String title, String action, BufferedImage icon) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -34,11 +34,13 @@ public class LevelItem {
 		this.c = c;
 		this.title = title;
 		this.action = action;
+		this.icon = icon;
 		this.visible = false;
 		this.hover = false;
 		tick = 0;
 		try {
 			phil = ImageIO.read(Player.class.getResource("/image/player/0.png"));
+			doneIcon = ImageIO.read(Player.class.getResource("/image/bg/overview/done.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,6 +83,17 @@ public class LevelItem {
 		this.active = active;
 	}
 
+	
+
+	public boolean isDone() {
+		return done;
+	}
+
+
+	public void setDone(boolean done) {
+		this.done = done;
+	}
+
 
 	public String getAction() {
 		return action;
@@ -92,11 +105,13 @@ public class LevelItem {
 	
 	public void render(Graphics g) {
 
+		
 		g.setFont(font);
 		g.setColor(c);
 		if(hover && active) {
 			g.fillRect(x, y, width, height);
 			g.setColor(Color.BLACK);
+			g.drawImage(icon, x, y, width, height, null);
 			
 			if(active) {
 				g.drawImage(phil, x+(width/2)-25, y, 50, 100, null);
@@ -113,7 +128,7 @@ public class LevelItem {
 			}
 			
 		}else {
-			
+			g.drawImage(icon, x, y, width, height, null);
 			g.drawRect(x, y, width, height);
 			if(active) {
 				g.drawImage(phil, x+(width/2)-25, y, 50, 100, null);
@@ -127,6 +142,8 @@ public class LevelItem {
 				
 				tick++;
 				
+			}else if(done) {
+				g.drawImage(doneIcon, x+(width/2)-50, y+(height/2)-50, 100, 100, null);
 			}
 			
 			
@@ -135,6 +152,7 @@ public class LevelItem {
 			g.setColor(Color.BLACK);
 		else
 			g.setColor(c);
+		
 		
 		drawCenteredString(g, title, new Rectangle(x, y+height/3, width, height), font);
 		visible = true;
