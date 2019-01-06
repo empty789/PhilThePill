@@ -47,7 +47,7 @@ public class GamePanel extends JPanel{
 	private ArrayList<MenuItem> menuList;
 	private ArrayList<MenuItem> answerList;
 	private ArrayList<LevelItem> lvlMenuList;
-	private Font menuFont, uiFont, answerFont;
+	private Font menuFont, uiFont, answerFont, vicFont;
 	
 	private LevelManager lm;
 	private ResourceManager resM;
@@ -83,6 +83,7 @@ public class GamePanel extends JPanel{
 
 		menuFont = new Font("Arial", Font.BOLD, 60);
 		uiFont = new Font("Arial", Font.BOLD, 30);
+		vicFont = new Font("Arial", Font.BOLD, 24);
 		answerFont = new Font("Arial", Font.ITALIC, 20);
 		
 		//Menu
@@ -95,7 +96,7 @@ public class GamePanel extends JPanel{
 		menuList.add(new MenuItem(maxW/2-150, 225, 300, 100, menuFont, Color.WHITE, "Zum Men�", "REPLAY"));
 		
 		//victorybtn
-		menuList.add(new MenuItem(maxW/2-150, (int) (maxH*0.45), 300, 100, menuFont, Color.WHITE, "Weiter", "VICTORY"));
+		menuList.add(new MenuItem((int) (maxW*0.15), (int) (maxH*0.75), 300, 100, menuFont, Color.WHITE, "Weiter", "VICTORY"));
 		
 		//wrong answer btn
 		menuList.add(new MenuItem((int) (maxW*0.8)-100, (int) (maxH*0.2), 300, 100, menuFont, Color.WHITE, "Weiter", "WRONG"));
@@ -365,9 +366,11 @@ public class GamePanel extends JPanel{
 			
 		}else if(state == GameState.VICTORY) {
 			lastState = GameState.VICTORY;
+			g.drawImage(resM.complete, 0, 0, maxW, maxH, null);
 			g.setColor(Color.WHITE);
-			drawCenteredString(g, "Gl�ckwunsch!", new Rectangle(0, 0, maxW, (int) (maxH*0.2)), menuFont);
-			drawCenteredString(g, level.getVicMsg(), new Rectangle(0, 0, maxW, (int) (maxH*0.4)), uiFont);
+			//drawCenteredString(g, "Gl�ckwunsch!", new Rectangle(0, 0, maxW, (int) (maxH*0.2)), menuFont);
+			g.setFont(vicFont);
+			g.drawString(level.getVicMsg(), (int) (maxW*0.075), (int) (maxH*0.6));
 			menuList.get(4).render(g);
 		}
 	}

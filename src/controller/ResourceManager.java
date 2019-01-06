@@ -13,7 +13,7 @@ import objects.entities.Player;
 public class ResourceManager {
 
 	public LevelManager lm;
-	public BufferedImage menu, manual, pause,victory, gameover, heart, head, liver, stom, overview,
+	public BufferedImage menu, manual, pause,victory, complete, gameover, heart, head, liver, stom, overview,
 							aright, awrong, quiz, teacher, energy, life, pipe;
 	public ArrayList<BufferedImage> bgList;
 	
@@ -34,6 +34,7 @@ public class ResourceManager {
 		//bg
 		victory = ImageIO.read(ResourceManager.class.getResource("/image/bg/victory.png"));
 		gameover = ImageIO.read(ResourceManager.class.getResource("/image/bg/gameover.png"));
+		complete = ImageIO.read(ResourceManager.class.getResource("/image/bg/complete.png"));
 		
 		//menu
 		menu = ImageIO.read(ResourceManager.class.getResource("/image/bg/menu/menu.png"));
