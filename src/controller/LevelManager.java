@@ -43,6 +43,8 @@ public class LevelManager {
 		
 		initLevel1();
 		initLevel2();
+		initLevel3();
+		initLevel4();
 		
 //		setLevel(0);
 //		gPanel.setCurrentLevel(0);
@@ -81,7 +83,7 @@ public class LevelManager {
 	
 	public void initLevel2() {
 		String victory = "Du hast es geschafft, das Herz ist wieder gesund!";
-		level = new Level(new Point(100, 100), victory, "kopf");
+		level = new Level(new Point(100, 100), victory, "herz");
 		level.add(new Block(0, maxH-40, 900, 40, Color.GREEN));
 		level.add(new Block(600, maxH-500,200, 50, Color.BLUE));
 		level.add(new Block(3100, maxH-300,150, 50, Color.BLUE));
@@ -102,8 +104,6 @@ public class LevelManager {
 		level.add(new Block(6000, maxH-40, 1500, 40, Color.GREEN));
 		level.add(new Block(4600, maxH-40-200-101, 100, 300, Color.YELLOW));
 		level.add(new Block(2500, maxH-40-300-101, 100, 300, Color.YELLOW));
-		
-		
 		
 		
 		level.add(new Life(800, 600, 20, 20, Color.RED));
@@ -137,7 +137,7 @@ public class LevelManager {
 	
 	public void initLevel3() {
 		String victory = "";
-		level = new Level(new Point(400, 400), victory, "magen");
+		level = new Level(new Point(400, 400), victory, "leber");
 		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
 		level.add(new Block(300, maxH-500, 400, 50, Color.BLUE));
 		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));
@@ -162,7 +162,7 @@ public class LevelManager {
 	
 	public void initLevel4() {
 		String victory = "";
-		level = new Level(new Point(400, 400), victory, "leber");
+		level = new Level(new Point(400, 400), victory, "darm");
 		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
 		level.add(new Block(300, maxH-500, 400, 50, Color.BLUE));
 		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));

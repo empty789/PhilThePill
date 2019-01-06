@@ -1,24 +1,30 @@
 package controller;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 import objects.Object;
 import objects.ObjectType;
-import objects.entities.Player;
+import objects.entities.Enemy;
+
 
 public class ResourceManager {
 
 	public LevelManager lm;
 	public BufferedImage menu, manual, pause,victory, complete, gameover, heart, head, liver, stom, overview,
-							aright, awrong, quiz, teacher, energy, life, pipe;
+							aright, awrong, quiz, teacher, energy, life, pipe, boss1, boss1_shoot, enemy1_r, enemy1_l;
 	public ArrayList<BufferedImage> bgList;
 	
 	public ResourceManager(LevelManager lm) throws IOException {
 		this.lm = lm;
+		
+
 		loadImages();
 	}
 	
@@ -59,25 +65,40 @@ public class ResourceManager {
 		life = ImageIO.read(ResourceManager.class.getResource("/image/items/life.png"));
 		pipe = ImageIO.read(ResourceManager.class.getResource("/image/items/pipe.png"));
 		
+		//boss
+		boss1 = ImageIO.read(ResourceManager.class.getResource("/image/boss/boss1.png"));
+		boss1_shoot = ImageIO.read(ResourceManager.class.getResource("/image/boss/boss1_shoot.png"));
+		
+		//enemy
+		enemy1_r = ImageIO.read(ResourceManager.class.getResource("/image/enemy/enemy1_r.png"));
+		enemy1_l = ImageIO.read(ResourceManager.class.getResource("/image/enemy/enemy1_l.png"));
 		loadItemImages();
 	}
 	
 	public void loadItemImages() {
 		for(int i = 0; i < lm.getLevelList().size(); i++) {
 			ArrayList<Object> obj = lm.getLevel(i).getObjects();
+			//bg
 			lm.getLevel(i).setBg(bgList.get(i));
 			
-			
+			//items
 			for(int j = 0; j < obj.size(); j++) {
 				if(obj.get(j).getType() == ObjectType.LIFE) {
 					obj.get(j).setImage(life);
-					System.out.println("life");
 				}else if(obj.get(j).getType() == ObjectType.PIPE) {
 					obj.get(j).setImage(pipe);
 				}else if(obj.get(j).getType() == ObjectType.ENERGYDRINK) {
 					obj.get(j).setImage(energy);
+				}else if(obj.get(j).getType() == ObjectType.ENTITY) {
+					Enemy e = (Enemy)obj.get(j);
+					e.setImage(enemy1_r,enemy1_l);
 				}
 			}
+			
+			//boss
+			lm.getLevel(i).getBoss().setImage(boss1, boss1_shoot);
+			
+			
 		}
 		
 	}

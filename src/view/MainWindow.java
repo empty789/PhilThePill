@@ -89,7 +89,7 @@ public class MainWindow extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(true);
 		//setLocationRelativeTo(null);
-		
+
 		gPanel.setFocusable(true);
 		gPanel.requestFocus();
 		setExtendedState(JFrame.MAXIMIZED_BOTH); 

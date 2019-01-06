@@ -27,23 +27,7 @@ public class InputManager implements KeyListener, MouseInputListener{
 		keys = 0;
 	}
 	
-	@Override
-	public void mouseClicked(MouseEvent e) {	
-		
-		
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
+	public void click(MouseEvent e) {
 		ArrayList<MenuItem> items = gPanel.getMenu();
 		ArrayList<MenuItem> answers = gPanel.getAnswerList();
 		ArrayList<LevelItem> lvls = gPanel.getLvlMenuList();
@@ -53,23 +37,23 @@ public class InputManager implements KeyListener, MouseInputListener{
 		if(gPanel.getState() == GameState.MENU || gPanel.getState() == GameState.PAUSE || gPanel.getState() == GameState.VICTORY || gPanel.getState() == GameState.ARIGHT || gPanel.getState() == GameState.AWRONG) {
 			for(int i = 0; i < items.size(); i++) {
 				if(items.get(i).getBounds().contains(mX, mY) && items.get(i).isVisible() == true) {
-					if(items.get(i).getAction().equals("START")) {
+					if(items.get(i).getAction().equals("STARTBUTTON")) {
 						gPanel.setState(GameState.LEVELOVERVIEW);
 						player.restart();
-					}else if(items.get(i).getAction().equals("EXIT")) {
+					}else if(items.get(i).getAction().equals("EXITBUTTON")) {
 						System.exit(0);
-					}else if(items.get(i).getAction().equals("REPLAY")) {
+					}else if(items.get(i).getAction().equals("REPLAYBUTTON")) {
 						player.restart();
 						gPanel.getLevel().resetLevel();
 						gPanel.setState(GameState.MENU);
-					}else if(items.get(i).getAction().equals("MANUAL")) {
+					}else if(items.get(i).getAction().equals("MANUALBUTTON")) {
 						gPanel.setState(GameState.MANUAL);
-					}else if(items.get(i).getAction().equals("VICTORY")) {
+					}else if(items.get(i).getAction().equals("VICTORYBUTTON")) {
 						gPanel.setCurrentLevel(gPanel.getCurrentLevel()+1);
 						gPanel.setState(GameState.LEVELOVERVIEW);
 						keys = 0;
-					}else if(items.get(i).getAction().equals("RIGHT") || items.get(i).getAction().equals("WRONG")) {
-						if(items.get(i).getAction().equals("WRONG"))
+					}else if(items.get(i).getAction().equals("RIGHTBUTTON") || items.get(i).getAction().equals("WRONGBUTTON")) {
+						if(items.get(i).getAction().equals("WRONGBUTTON"))
 							player.setLifes(player.getLifes()-1);
 						gPanel.setState(GameState.RUNNING);
 						keys = 0;
@@ -85,10 +69,8 @@ public class InputManager implements KeyListener, MouseInputListener{
 				if(answers.get(i).getBounds().contains(mX, mY) && answers.get(i).isVisible() == true) {
 					if(answers.get(i).getAction().equals("RIGHT")) {
 						gPanel.setState(GameState.ARIGHT);
-						gPanel.setNextQuestion();
 					}else if(answers.get(i).getAction().equals("WRONG")) {
 						gPanel.setState(GameState.AWRONG);
-						gPanel.setNextQuestion();
 					}
 				}
 			}
@@ -99,30 +81,53 @@ public class InputManager implements KeyListener, MouseInputListener{
 				if(lvls.get(i).getBounds().contains(mX, mY) && lvls.get(i).isVisible() == true) {
 					if(lvls.get(i).getAction().equals("KOPF") && lvls.get(i).isActive()) {
 						gPanel.setState(GameState.RUNNING);
-						gPanel.setCurrentLevel(0);
+						//gPanel.setCurrentLevel(0);
 					}else if(lvls.get(i).getAction().equals("HERZ") && lvls.get(i).isActive()) {
 						gPanel.setState(GameState.RUNNING);
-						gPanel.setCurrentLevel(1);
+						//gPanel.setCurrentLevel(1);
 					}
 					else if(lvls.get(i).getAction().equals("LEBER") && lvls.get(i).isActive()) {
 						gPanel.setState(GameState.RUNNING);
-						gPanel.setCurrentLevel(2);
+						//gPanel.setCurrentLevel(2);
 					}
-					else if(lvls.get(i).getAction().equals("MAGEN") && lvls.get(i).isActive()) {
+					else if(lvls.get(i).getAction().equals("DARM") && lvls.get(i).isActive()) {
 						gPanel.setState(GameState.RUNNING);
-						gPanel.setCurrentLevel(3);
+						//gPanel.setCurrentLevel(3);
 					}
 				}
 			}
 		}
 	}
-
+	
+	
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseClicked(MouseEvent e) {	
+		
+		click(e);
+		
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		click(e);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		click(e);
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		click(e);
 	}
 
 	@Override
@@ -135,7 +140,7 @@ public class InputManager implements KeyListener, MouseInputListener{
 		int mY = e.getY();
 
 		for(int i = 0; i < items.size(); i++) {
-			if(items.get(i).getBounds().contains(mX, mY) && items.get(i).isVisible()) {
+			if(items.get(i).getBounds().contains(mX, mY) ) {
 				items.get(i).setHover(true);
 			}else {
 				items.get(i).setHover(false);
@@ -143,7 +148,7 @@ public class InputManager implements KeyListener, MouseInputListener{
 		}
 	
 		for(int i = 0; i < answers.size(); i++) {
-			if(answers.get(i).getBounds().contains(mX, mY)  && answers.get(i).isVisible()) {
+			if(answers.get(i).getBounds().contains(mX, mY) ) {
 				answers.get(i).setHover(true);
 			}else {
 				answers.get(i).setHover(false);
@@ -151,7 +156,7 @@ public class InputManager implements KeyListener, MouseInputListener{
 		}
 		
 		for(int i = 0; i < lvls.size(); i++) {
-			if(lvls.get(i).getBounds().contains(mX, mY)  && lvls.get(i).isVisible()) {
+			if(lvls.get(i).getBounds().contains(mX, mY) ) {
 				lvls.get(i).setHover(true);
 			}else {
 				lvls.get(i).setHover(false);

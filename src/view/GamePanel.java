@@ -7,6 +7,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -83,27 +84,31 @@ public class GamePanel extends JPanel{
 
 		menuFont = new Font("Arial", Font.BOLD, 60);
 		uiFont = new Font("Arial", Font.BOLD, 30);
+
 		vicFont = new Font("Arial", Font.BOLD, 24);
 		answerFont = new Font("Arial", Font.ITALIC, 20);
 		
 		//Menu
 		menuList = new ArrayList<MenuItem>();
-		menuList.add(new MenuItem((int) (maxW*0.2), (int) (maxH*0.5), 300, 100, menuFont, Color.WHITE, "Start", "START"));
-		menuList.add(new MenuItem((int) (maxW*0.2), (int) (maxH*0.5)+125, 300, 100, menuFont, Color.WHITE, "Anleitung", "MANUAL"));
-		menuList.add(new MenuItem((int) (maxW*0.2), (int) (maxH*0.5)+250, 300, 100, menuFont, Color.WHITE, "Beenden", "EXIT"));
+		menuList.add(new MenuItem((int) (maxW*0.2), (int) (maxH*0.5), 300, 100, menuFont, Color.WHITE, "Start", "STARTBUTTON"));
+		menuList.add(new MenuItem((int) (maxW*0.2), (int) (maxH*0.5)+125, 300, 100, menuFont, Color.WHITE, "Anleitung", "MANUALBUTTON"));
+		menuList.add(new MenuItem((int) (maxW*0.2), (int) (maxH*0.5)+250, 300, 100, menuFont, Color.WHITE, "Beenden", "EXITBUTTON"));
 		
 		//gameover menu
-		menuList.add(new MenuItem(maxW/2-150, 225, 300, 100, menuFont, Color.WHITE, "Zum Menï¿½", "REPLAY"));
+		menuList.add(new MenuItem(maxW/2-150, 225, 300, 100, menuFont, Color.WHITE, "Zum Menü", "REPLAYBUTTON"));
 		
 		//victorybtn
-		menuList.add(new MenuItem((int) (maxW*0.15), (int) (maxH*0.75), 300, 100, menuFont, Color.WHITE, "Weiter", "VICTORY"));
+		menuList.add(new MenuItem((int) (maxW*0.15), (int) (maxH*0.75), 300, 100, menuFont, Color.WHITE, "Weiter", "VICTORYBUTTON"));
 		
 		//wrong answer btn
-		menuList.add(new MenuItem((int) (maxW*0.8)-100, (int) (maxH*0.2), 300, 100, menuFont, Color.WHITE, "Weiter", "WRONG"));
+		menuList.add(new MenuItem((int) (maxW*0.8)-100, (int) (maxH*0.2), 300, 100, menuFont, Color.WHITE, "Weiter", "WRONGBUTTON"));
 		
 		//right answer btn
-		menuList.add(new MenuItem((int) (maxW*0.8)-100, (int) (maxH*0.2), 300, 100, menuFont, Color.WHITE, "Weiter", "RIGHT"));
-				
+		menuList.add(new MenuItem((int) (maxW*0.8)-100, (int) (maxH*0.2), 300, 100, menuFont, Color.WHITE, "Weiter", "RIGHTBUTTON"));
+		
+		//joker pipe button (quiz)
+		menuList.add(new MenuItem((int) (maxW*0.8)-100, (int) (maxH*0.2), 300, 100, menuFont, Color.WHITE, "pipe", "PIPEJOKER", resM.pipe));
+		
 		//answer menu
 		answerList = new ArrayList<MenuItem>();
 		
@@ -113,7 +118,7 @@ public class GamePanel extends JPanel{
 		lvlMenuList.add(new LevelItem((int) (maxW*0.3),(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Kopf", "KOPF", resM.head));
 		lvlMenuList.add(new LevelItem((int) (maxW*0.3)+225,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Herz", "HERZ", resM.heart));
 		lvlMenuList.add(new LevelItem((int) (maxW*0.3)+450,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Leber", "LEBER", resM.liver));
-		lvlMenuList.add(new LevelItem((int) (maxW*0.3)+675,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Magen", "MAGEN", resM.stom));
+		lvlMenuList.add(new LevelItem((int) (maxW*0.3)+675,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Darm", "DARM", resM.stom));
 		
 		level = lm.getLevel(0);
 		setCurrentLevel(0);
@@ -131,19 +136,22 @@ public class GamePanel extends JPanel{
 	}
 	
 	public void setCurrentLevel(int num) {
+		
 		currentLevel = num;
-		level = lm.getLevel(num);
-		
-		if(num != 0)
-			lvlMenuList.get(num-1).setDone(true);
-		
-		for(int i=0; i<lvlMenuList.size(); i++) {
-			lvlMenuList.get(i).setActive(false);
+		if(num <= lm.getLevelList().size()) {
+			level = lm.getLevel(num);
+	
+			if(num != 0)
+				lvlMenuList.get(num-1).setDone(true);
+			
+			for(int i=0; i<lvlMenuList.size(); i++) {
+				lvlMenuList.get(i).setActive(false);
+			}
+			
+			lvlMenuList.get(num).setActive(true);
+			player.setSpawn(level.getStartPoint());
+			player.respawn();
 		}
-		
-		lvlMenuList.get(num).setActive(true);
-		player.setSpawn(level.getStartPoint());
-		player.respawn();
 		
 	}
 	
@@ -189,10 +197,11 @@ public class GamePanel extends JPanel{
 	}
 	
 	public void setNextQuestion() {
+		answerList.clear();
 		q = qm.nextQuestion(level.getTopic());
 		qText = q.getQuestion();
 		ArrayList<String> answers = q.getAnswers();
-		
+
 		boolean foundIt = false;
 		for(int i = 0; i < 3; i++) {
 			int rand = r.nextInt(answers.size());
@@ -208,8 +217,10 @@ public class GamePanel extends JPanel{
 			if(rand == 0 && foundIt == false) {
 				foundIt = true;
 				answerList.add(new MenuItem((int) (maxW*0.3), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "RIGHT"));
+				
 			}else {
 				answerList.add(new MenuItem((int) (maxW*0.3), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "WRONG"));
+				
 			}
 			
 
@@ -217,7 +228,7 @@ public class GamePanel extends JPanel{
 			
 		}
 			
-
+		System.out.println(answerList);
 	}
 	
 	@Override
@@ -229,11 +240,18 @@ public class GamePanel extends JPanel{
 		Rectangle visibleScreen = new Rectangle(visibleX, visibleY, maxW, maxH);
 		
 		Graphics2D g2d = (Graphics2D) g;
+		
+		g2d.setRenderingHint(
+		        RenderingHints.KEY_TEXT_ANTIALIASING,
+		        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		
 		g.setColor(Color.BLUE.darker());
 		
 
 		g.fillRect(0, 0, maxW, maxH);
-		g.drawImage(resM.bgList.get(currentLevel), 0, 0, maxW, maxH, null);
+		if(currentLevel < lm.getLevelList().size()) {
+				g.drawImage(resM.bgList.get(currentLevel), 0, 0, maxW, maxH, null);
+		}
 		
 		if(state == GameState.RUNNING) {
 			lastState = GameState.RUNNING;
@@ -285,11 +303,15 @@ public class GamePanel extends JPanel{
 			g.setColor(Color.WHITE);
 			g.setFont(uiFont);
 			if(player.getX()>maxW-maxW/2) {
-				g.drawString("Leben: x"+player.getLifes(), visibleX+50, (int) (maxH*0.05));
-				g.drawString("Pfeifen: x"+player.getPipes(), visibleX+300, (int) (maxH*0.05));
+				g.drawImage(resM.life, visibleX+50, (int) (maxH*0.05)-35, 50, 50, null);
+				g.drawString(" x"+player.getLifes(), visibleX+105, (int) (maxH*0.05));
+				g.drawImage(resM.pipe, visibleX+180, (int) (maxH*0.05)-35, 80, 50, null);
+				g.drawString(" x"+player.getPipes(), visibleX+235, (int) (maxH*0.05));
 			}else {
-				g.drawString("Leben: x"+player.getLifes(), 50, (int) (maxH*0.05));
-				g.drawString("Pfeifen: x"+player.getPipes(), 300, (int) (maxH*0.05));
+				g.drawImage(resM.life, 50, (int) (maxH*0.05)-35, 50, 50, null);
+				g.drawString(" x"+player.getLifes(), 105, (int) (maxH*0.05));
+				g.drawImage(resM.pipe, 180, (int) (maxH*0.05)-35, 80, 50, null);
+				g.drawString(" x"+player.getPipes(), 235, (int) (maxH*0.05));
 			}
 			
 			//boss hp
@@ -307,19 +329,21 @@ public class GamePanel extends JPanel{
 		}else if(state == GameState.MENU) {
 			g.drawImage(resM.menu, 0, 0, maxW, maxH, null);
 			menuList.get(0).render(g);
+			menuList.get(1).setX((int) (maxW*0.2));
 			menuList.get(1).render(g);
+			menuList.get(2).setX((int) (maxW*0.2));
 			menuList.get(2).render(g);
 		}else if(state == GameState.PAUSE) {
 			lastState = GameState.RUNNING;
 			g.drawImage(resM.pause, 0, 0, maxW, maxH, null);
+			menuList.get(1).setX((int) (maxW*0.3));
 			menuList.get(1).render(g);
+			menuList.get(2).setX((int) (maxW*0.3));
 			menuList.get(2).render(g);
 		}else if(state == GameState.MANUAL) {
 			g.drawImage(resM.manual, 0, 0, maxW, maxH, null);
 		}else if(state == GameState.GAMEOVER) {
-			g.setFont(menuFont);
-			g.setColor(Color.WHITE);
-			g.drawString("GAMEOVER", maxW/2-150, 100);
+			g.drawImage(resM.gameover, 0, 0, maxW, maxH, null);
 			menuList.get(3).render(g);
 		}else if(state == GameState.MINIGAME) {
 			lastState = GameState.MINIGAME;
@@ -336,6 +360,8 @@ public class GamePanel extends JPanel{
 			answerList.get(0).render(g);
 			answerList.get(1).render(g);
 			answerList.get(2).render(g);
+			//joker
+			menuList.get(7).render(g);
 			g.setColor(Color.WHITE);
 			g.setFont(answerFont);
 			g.drawString(a1Text,(int) (maxW*0.3)+40, (int) (maxH*0.4)+23);
@@ -372,6 +398,8 @@ public class GamePanel extends JPanel{
 			g.setFont(vicFont);
 			g.drawString(level.getVicMsg(), (int) (maxW*0.075), (int) (maxH*0.6));
 			menuList.get(4).render(g);
+		}else if(state == GameState.GAMEWON) {
+			g.drawImage(resM.victory, 0, 0, maxW, maxH, null);
 		}
 	}
 	

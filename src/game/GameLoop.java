@@ -51,7 +51,7 @@ public class GameLoop implements Runnable{
     private void tick() {
     	//System.out.println(gPanel.getState());
     	//main tick method while game is running
-    	level = lm.getLevel(gPanel.getCurrentLevel());
+    	level = gPanel.getLevel();
     	
     	if(gPanel.getState() == GameState.RUNNING) {
 			player.tick(level.getObjects());
@@ -122,6 +122,11 @@ public class GameLoop implements Runnable{
 		if(player.getLifes() <=0) {
 			gPanel.setState(GameState.GAMEOVER);
 		}
+		
+		//wincondition
+		if(gPanel.getCurrentLevel() > lm.getLevelList().size()) {
+			gPanel.setState(GameState.GAMEWON);
+		}
     }
     
     @Override
@@ -163,7 +168,7 @@ public class GameLoop implements Runnable{
             
             if(System.currentTimeMillis() - 1000 > timer){
                 timer += 1000;
-                System.out.printf("FPS: %d | TPS: %d\n", fps, tps);
+                //System.out.printf("FPS: %d | TPS: %d\n", fps, tps);
                 fps = 0;
                 tps = 0;
             }

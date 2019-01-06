@@ -2,6 +2,7 @@ package objects.entities;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import objects.Object;
@@ -10,10 +11,9 @@ import objects.ObjectType;
 
 public class Enemy extends Object{
 	
-	private float velX, velY;
-	private float gravity = 0.5f;
-	private final float MAX_VEL = 10;
+	private float velX;
 	private boolean isAlive;
+	private BufferedImage image_r, image_l;
 	
 	public Enemy(int x, int y, int width, int height) {
 		setX(x);
@@ -52,9 +52,35 @@ public class Enemy extends Object{
 	
 	public void render(Graphics g) {
 		if(isAlive) {
-			g.setColor(getColor());
-			g.fillRect(getX(), getY(), getWidth(), getHeight());
+			if(getImages() != null) {
+				ArrayList<BufferedImage> images = getImages();
+				if(velX > 0) {
+					g.drawImage(images.get(0), getX(), getY(), getWidth(), getHeight(), null);
+				}else {
+					g.drawImage(images.get(1), getX(), getY(), getWidth(), getHeight(), null);
+				}
+				
+			}else {
+				g.setColor(getColor());
+				g.fillRect(getX(), getY(), getWidth(), getHeight());
+			}
 		}
+	}
+	
+	public void setImage(BufferedImage r, BufferedImage l) {
+		image_r = r;
+		image_l = l;
+	}
+	
+	public ArrayList<BufferedImage> getImages() {
+		if(image_r == null || image_l == null)
+			return null;
+		
+		ArrayList<BufferedImage> result = new ArrayList<BufferedImage>();
+		result.add(image_r);
+		result.add(image_l);
+		
+		return result;
 	}
 	
 	public boolean isAlive() {

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import objects.Object;
@@ -14,10 +15,11 @@ import objects.misc.AdvancedBullet;
 public class Boss extends Object{
 	
 	private float velX, velY;
-	private boolean isAlive;
+	private boolean isAlive, shooting;
 	private int hitpoints;
 	private ArrayList<AdvancedBullet> bulletList;
 	private int cooldown;
+	private BufferedImage image, image_shoot;
 	
 	public Boss(int x, int y, int width, int height) {
 		setX(x);
@@ -29,6 +31,7 @@ public class Boss extends Object{
 		velY = 2;
 		hitpoints = 100;
 		cooldown = 0;
+		shooting = false;
 		//bullet = new AdvancedBullet(ObjectType.BOSS, new Point(getX(), getY()), 10, 10, 700);
 		bulletList = new ArrayList<AdvancedBullet>();
 	}	
@@ -54,11 +57,12 @@ public class Boss extends Object{
 		//shoot
 		if(cooldown >= 200) {
 			shoot(p);
+			shooting = true;
 			cooldown = 0;
-		}else {
-			cooldown++;
+		}else if(cooldown >= 30) {
+			shooting = false;	
 		}
-		
+		cooldown++;
 		//clear up dead bullets & collision
 		for(int i = 0; i < bulletList.size(); i++) {
 			//block
@@ -87,13 +91,38 @@ public class Boss extends Object{
 	
 	public void render(Graphics g) {
 		if(isAlive) {
-			g.setColor(getColor());
-			g.fillRect(getX(), getY(), getWidth(), getHeight());
+			if(getImages() != null) {
+				ArrayList<BufferedImage> images = getImages();
+				if(shooting) {
+					g.drawImage(images.get(1), getX(), getY(), getWidth(), getHeight(), null);
+				}else {
+					g.drawImage(images.get(0), getX(), getY(), getWidth(), getHeight(), null);
+				}
+			}else {
+				g.setColor(getColor());
+				g.fillRect(getX(), getY(), getWidth(), getHeight());
+			}
 		}
 	}
 	
+	public void setImage(BufferedImage image, BufferedImage image_shoot) {
+		this.image = image;
+		this.image_shoot = image_shoot;
+	}
+	
+	public ArrayList<BufferedImage> getImages() {
+		if(image == null || image_shoot == null)
+			return null;
+		
+		ArrayList<BufferedImage> result = new ArrayList<BufferedImage>();
+		result.add(image);
+		result.add(image_shoot);
+		
+		return result;
+	}
+	
 	public void shoot(Player p) {
-		bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition(), p.getCenterPosition(), 10, 10, 100));
+		bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , p.getCenterPosition(), 10, 10, 100));
 	}
 	
 	public ArrayList<AdvancedBullet> getBulletList() {
@@ -119,6 +148,7 @@ public class Boss extends Object{
 	public void setHitpoints(int hitpoints) {
 		this.hitpoints = hitpoints;
 	}
+
 
 	public Rectangle getBox() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());

@@ -19,8 +19,8 @@ public class AdvancedBullet extends Object{
 	private Point origin;
 	
 	public AdvancedBullet(ObjectType owner,Point origin, Point destination, int speed, int dmg, int lifeTime) {
-		setWidth(10);
-		setHeight(10);
+		setWidth(20);
+		setHeight(20);
 		setX(origin.x);
 		setY(origin.y);
 		this.owner = owner;
@@ -68,7 +68,7 @@ public class AdvancedBullet extends Object{
 	}
 
 	public void render(Graphics g) {
-		g.setColor(Color.RED);
+		g.setColor(Color.MAGENTA.darker());
 		g.fillOval(cPos.x+3, cPos.y+3, getWidth(), getHeight());
 
 	}
