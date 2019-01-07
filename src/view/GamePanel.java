@@ -95,7 +95,7 @@ public class GamePanel extends JPanel{
 		menuList.add(new MenuItem((int) (maxW*0.2), (int) (maxH*0.5)+250, 300, 100, menuFont, Color.WHITE, "Beenden", "EXITBUTTON"));
 		
 		//gameover menu
-		menuList.add(new MenuItem(maxW/2-150, 225, 300, 100, menuFont, Color.WHITE, "Zum Menü", "REPLAYBUTTON"));
+		menuList.add(new MenuItem(maxW/2-150, (int) (maxH*0.8), 300, 100, menuFont, Color.WHITE, "Zum Menü", "REPLAYBUTTON"));
 		
 		//victorybtn
 		menuList.add(new MenuItem((int) (maxW*0.15), (int) (maxH*0.75), 300, 100, menuFont, Color.WHITE, "Weiter", "VICTORYBUTTON"));

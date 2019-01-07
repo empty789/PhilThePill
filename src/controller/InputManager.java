@@ -43,9 +43,9 @@ public class InputManager implements KeyListener, MouseInputListener{
 					}else if(items.get(i).getAction().equals("EXITBUTTON")) {
 						System.exit(0);
 					}else if(items.get(i).getAction().equals("REPLAYBUTTON")) {
-						player.restart();
-						gPanel.getLevel().resetLevel();
 						gPanel.setState(GameState.MENU);
+						player.restart();
+						gPanel.setCurrentLevel(0);
 					}else if(items.get(i).getAction().equals("MANUALBUTTON")) {
 						gPanel.setState(GameState.MANUAL);
 					}else if(items.get(i).getAction().equals("VICTORYBUTTON")) {
