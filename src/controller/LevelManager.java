@@ -9,6 +9,7 @@ import objects.ObjectType;
 import objects.entities.Boss;
 import objects.entities.Enemy;
 import objects.entities.Player;
+import objects.entities.StaticEnemy;
 import objects.items.EnergyDrink;
 import objects.items.Life;
 import objects.items.Pipe;
@@ -23,20 +24,15 @@ public class LevelManager {
 
 	private Level level;
 	private MainWindow mw;
-	private GameLoop gLoop;
-	private GamePanel gPanel;
+
 	
 	private ArrayList<Level> levelList;
 	
-	private int maxW;
 	private int maxH;
 	
 	public LevelManager(MainWindow mw) {
 		this.mw = mw;
 
-		
-		
-		maxW = mw.getMaxWidth();
 		maxH = mw.getMaxHeight();
 		
 		levelList = new ArrayList<Level>();
@@ -56,6 +52,9 @@ public class LevelManager {
 		level = new Level(new Point(400, 400), victory, "kopf");
 		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
 		level.add(new Block(300, maxH-300, 400, 50, Color.BLUE));
+		
+		level.add(new StaticEnemy(1000, maxH-600, 100, 100));
+		
 		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));
 		level.add(new Block(1000, maxH-40-300-101, 100, 300, Color.YELLOW));
 		level.add(new Block(1400, maxH-280-40, 100, 280, Color.RED));
@@ -106,7 +105,7 @@ public class LevelManager {
 		level.add(new Block(2500, maxH-40-300-101, 100, 300, Color.YELLOW));
 		
 		
-		level.add(new Life(800, 600, 20, 20, Color.RED));
+		level.add(new Life(700,maxH-40-60, 20, 20, Color.RED));
 		level.add(new Pipe(700, maxH-40-500, 20, 20, Color.GREEN));
 		level.add(new EnergyDrink(1900, maxH-40-100, 20, 20, Color.YELLOW));
 		level.add(new Life(5230,100, 20, 20, Color.RED));

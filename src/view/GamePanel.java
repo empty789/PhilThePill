@@ -8,8 +8,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.io.IOException;
+import java.awt.font.TextAttribute;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -21,6 +22,7 @@ import game.GameState;
 import objects.Object;
 import objects.ObjectType;
 import objects.entities.Player;
+import objects.entities.StaticEnemy;
 import objects.level.Level;
 import objects.misc.AdvancedBullet;
 import objects.misc.Bullet;
@@ -48,7 +50,7 @@ public class GamePanel extends JPanel{
 	private ArrayList<MenuItem> menuList;
 	private ArrayList<MenuItem> answerList;
 	private ArrayList<LevelItem> lvlMenuList;
-	private Font menuFont, uiFont, answerFont, vicFont;
+	private Font menuFont, uiFont, answerFont, answerFont_del, vicFont;
 	
 	private LevelManager lm;
 	private ResourceManager resM;
@@ -56,7 +58,8 @@ public class GamePanel extends JPanel{
 	private int maxW;
 	private int maxH;
 	
-	private int currentLevel;
+	private int currentLevel, rightAnswer, delAnswer;
+	private boolean showHint;
 	
 	private Random r;
 	
@@ -76,7 +79,8 @@ public class GamePanel extends JPanel{
 		
 		currentLevel = 0;
 		r = new Random();
-
+		showHint = false;
+		delAnswer = 99;
 		
 		setPreferredSize(new Dimension(maxW, maxH));
 		state = GameState.MENU;
@@ -87,6 +91,11 @@ public class GamePanel extends JPanel{
 
 		vicFont = new Font("Arial", Font.BOLD, 24);
 		answerFont = new Font("Arial", Font.ITALIC, 20);
+		
+		Font tempFont = new Font("Arial", Font.ITALIC, 20);
+		Map attributes = tempFont.getAttributes();
+		attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+		answerFont_del = new Font(attributes);
 		
 		//Menu
 		menuList = new ArrayList<MenuItem>();
@@ -115,10 +124,10 @@ public class GamePanel extends JPanel{
 		
 		//lvl overview list
 		lvlMenuList = new ArrayList<LevelItem>();
-		lvlMenuList.add(new LevelItem((int) (maxW*0.3),(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Kopf", "KOPF", resM.head));
-		lvlMenuList.add(new LevelItem((int) (maxW*0.3)+225,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Herz", "HERZ", resM.heart));
-		lvlMenuList.add(new LevelItem((int) (maxW*0.3)+450,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Leber", "LEBER", resM.liver));
-		lvlMenuList.add(new LevelItem((int) (maxW*0.3)+675,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Darm", "DARM", resM.stom));
+		lvlMenuList.add(new LevelItem((int) (maxW*0.28),(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Kopf", "KOPF", resM.head));
+		lvlMenuList.add(new LevelItem((int) (maxW*0.28)+225,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Herz", "HERZ", resM.heart));
+		lvlMenuList.add(new LevelItem((int) (maxW*0.28)+450,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Leber", "LEBER", resM.liver));
+		lvlMenuList.add(new LevelItem((int) (maxW*0.28)+675,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Darm", "DARM", resM.stom));
 		
 		level = lm.getLevel(0);
 		setCurrentLevel(0);
@@ -184,6 +193,12 @@ public class GamePanel extends JPanel{
 		}
 	}
 	
+	public void resetAnswerColor() {
+		for(int i = 0; i < answerList.size(); i++) {
+			answerList.get(i).setC(Color.WHITE);;
+		}
+	}
+	
 	public ArrayList<MenuItem> getMenu() {
 		return menuList;
 	}
@@ -216,10 +231,10 @@ public class GamePanel extends JPanel{
 			
 			if(rand == 0 && foundIt == false) {
 				foundIt = true;
-				answerList.add(new MenuItem((int) (maxW*0.3), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "RIGHT"));
-				
+				answerList.add(new MenuItem((int) (maxW*0.4), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "RIGHT"));
+				rightAnswer = i;
 			}else {
-				answerList.add(new MenuItem((int) (maxW*0.3), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "WRONG"));
+				answerList.add(new MenuItem((int) (maxW*0.4), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "WRONG"));
 				
 			}
 			
@@ -231,6 +246,38 @@ public class GamePanel extends JPanel{
 		System.out.println(answerList);
 	}
 	
+	
+	
+	public void ShowHint() {
+		if(!showHint && player.getPipes() > 0) {
+			showHint = true;
+			player.setPipes(player.getPipes()-1);
+			delAnswer = 99;
+			int rand = r.nextInt(100);
+			System.out.println(rand);
+
+
+			if(rand >= 90) {
+				answerList.get(rightAnswer).setC(Color.GREEN);
+			}else if(rand >= 45) {
+				answerList.get(rightAnswer).setC(Color.WHITE);
+				setNextQuestion();
+			}else if(rand < 45){
+				int del = r.nextInt(2);
+				
+				while(del == rightAnswer) {
+					del = r.nextInt(2);
+				}
+				delAnswer = del;
+			}
+		}
+		
+	}
+
+	public void setShowHint(boolean b) {
+		showHint = b;
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -299,6 +346,20 @@ public class GamePanel extends JPanel{
 				}
 			}
 			
+			//draw static enemys bullets
+			ArrayList<StaticEnemy> staticEnemyList = level.getStaticEnemys();
+			
+			for(int i = 0; i < staticEnemyList.size(); i++) {
+				ArrayList<AdvancedBullet> enemyBulletList = staticEnemyList.get(i).getBulletList();
+				for(int j = 0; j < enemyBulletList.size(); j++) {
+					if(visibleScreen.intersects(enemyBulletList.get(j).getBounds()) && enemyBulletList.get(j).isAlive()) {
+						enemyBulletList.get(j).render(g);
+					}
+				}
+			}
+
+			
+			
 			//interface
 			g.setColor(Color.WHITE);
 			g.setFont(uiFont);
@@ -348,6 +409,10 @@ public class GamePanel extends JPanel{
 		}else if(state == GameState.MINIGAME) {
 			lastState = GameState.MINIGAME;
 			g.drawImage(resM.quiz, 0, 0, maxW, maxH, null);
+			g.setColor(Color.WHITE);
+			g.setFont(uiFont);
+			g.drawImage(resM.pipe, 180, (int) (maxH*0.05)-35, 80, 50, null);
+			g.drawString(" x"+player.getPipes(), 235, (int) (maxH*0.05));
 			g.setFont(menuFont);
 			g.setColor(Color.WHITE);
 			//g.drawString("QUIZ", maxW/2-150, 100);
@@ -364,9 +429,27 @@ public class GamePanel extends JPanel{
 			menuList.get(7).render(g);
 			g.setColor(Color.WHITE);
 			g.setFont(answerFont);
-			g.drawString(a1Text,(int) (maxW*0.3)+40, (int) (maxH*0.4)+23);
-			g.drawString(a2Text,(int) (maxW*0.3)+40, (int) (maxH*0.4)+23+50);
-			g.drawString(a3Text,(int) (maxW*0.3)+40, (int) (maxH*0.4)+23+100);
+			
+			if(delAnswer == 0 && showHint) {
+				g.setFont(answerFont_del);
+			}else {
+				g.setFont(answerFont);
+			}
+			g.drawString(a1Text,(int) (maxW*0.4)+40, (int) (maxH*0.4)+23);
+			
+			if(delAnswer == 1 && showHint) {
+				g.setFont(answerFont_del);
+			}else {
+				g.setFont(answerFont);
+			}
+			g.drawString(a2Text,(int) (maxW*0.4)+40, (int) (maxH*0.4)+23+50);
+			
+			if(delAnswer == 2 && showHint) {
+				g.setFont(answerFont_del);
+			}else {
+				g.setFont(answerFont);
+			}
+			g.drawString(a3Text,(int) (maxW*0.4)+40, (int) (maxH*0.4)+23+100);
 		}else if(state == GameState.ARIGHT) {
 			lastState = GameState.ARIGHT;
 //			g.setColor(Color.WHITE);

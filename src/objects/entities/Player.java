@@ -222,6 +222,11 @@ public class Player extends Object {
 						getDamage();
 					}
 				}
+			}else if(obj.get(i).getType() == ObjectType.ENTITYSTATIC){
+				StaticEnemy e = (StaticEnemy)obj.get(i);
+				if(getBounds().intersects(e.getBox()) && !immune) {
+					getDamage();
+				}
 			}
 			
 			//bullet collision

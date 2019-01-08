@@ -8,6 +8,7 @@ import objects.Object;
 import objects.ObjectType;
 import objects.entities.Boss;
 import objects.entities.Enemy;
+import objects.entities.StaticEnemy;
 import objects.items.Life;
 import objects.misc.Trigger;
 import objects.obstacles.Block;
@@ -68,6 +69,9 @@ public class Level {
 		}else if(obj.getType() == ObjectType.ENTITY) {
 			Enemy enemy = new Enemy(obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight());
 			dObject = enemy;
+		}else if(obj.getType() == ObjectType.ENTITYSTATIC) {
+			StaticEnemy enemy = new StaticEnemy(obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight());
+			dObject = enemy;
 		}
 		 
 		defaultObj.add(dObject);
@@ -93,6 +97,18 @@ public class Level {
 		for(int i = 0; i < objList.size(); i++) {
 			if(objList.get(i).getType() == ObjectType.ENTITY) {
 				eList.add((Enemy) objList.get(i));
+			}
+		}
+		
+		return eList;
+	}
+	
+	public ArrayList<StaticEnemy> getStaticEnemys(){
+		ArrayList<StaticEnemy> eList = new ArrayList<StaticEnemy>();
+		
+		for(int i = 0; i < objList.size(); i++) {
+			if(objList.get(i).getType() == ObjectType.ENTITYSTATIC) {
+				eList.add((StaticEnemy) objList.get(i));
 			}
 		}
 		

@@ -12,13 +12,14 @@ import javax.imageio.ImageIO;
 import objects.Object;
 import objects.ObjectType;
 import objects.entities.Enemy;
+import objects.entities.StaticEnemy;
 
 
 public class ResourceManager {
 
 	public LevelManager lm;
 	public BufferedImage menu, manual, pause,victory, complete, gameover, heart, head, liver, stom, overview,
-							aright, awrong, quiz, teacher, energy, life, pipe, boss1, boss1_shoot, enemy1_r, enemy1_l;
+							aright, awrong, quiz, teacher, energy, life, pipe, boss1, boss1_shoot, enemy1_r, enemy1_l, enemy2_r, enemy2_l, enemy3_r, enemy3_l;
 	public ArrayList<BufferedImage> bgList;
 	
 	public ResourceManager(LevelManager lm) throws IOException {
@@ -72,6 +73,11 @@ public class ResourceManager {
 		//enemy
 		enemy1_r = ImageIO.read(ResourceManager.class.getResource("/image/enemy/enemy1_r.png"));
 		enemy1_l = ImageIO.read(ResourceManager.class.getResource("/image/enemy/enemy1_l.png"));
+		enemy2_r = ImageIO.read(ResourceManager.class.getResource("/image/enemy/enemy2_r.png"));
+		enemy2_l = ImageIO.read(ResourceManager.class.getResource("/image/enemy/enemy2_l.png"));
+		enemy3_r = ImageIO.read(ResourceManager.class.getResource("/image/enemy/enemy3_r.png"));
+		enemy3_l = ImageIO.read(ResourceManager.class.getResource("/image/enemy/enemy3_l.png"));
+		
 		loadItemImages();
 	}
 	
@@ -92,6 +98,9 @@ public class ResourceManager {
 				}else if(obj.get(j).getType() == ObjectType.ENTITY) {
 					Enemy e = (Enemy)obj.get(j);
 					e.setImage(enemy1_r,enemy1_l);
+				}else if(obj.get(j).getType() == ObjectType.ENTITYSTATIC) {
+					StaticEnemy e = (StaticEnemy)obj.get(j);
+					e.setImage(enemy3_r,enemy3_l);
 				}
 			}
 			

@@ -9,6 +9,7 @@ import objects.ObjectType;
 import objects.entities.Boss;
 import objects.entities.Enemy;
 import objects.entities.Player;
+import objects.entities.StaticEnemy;
 import objects.level.Level;
 import objects.misc.AdvancedBullet;
 import objects.misc.Trigger;
@@ -40,7 +41,7 @@ public class GameLoop implements Runnable{
 	private void start() {
         if(running) return;
         running = true;
-        new Thread(this, "SidescrollerMain-Thread").start();
+        new Thread(this, "Gameloop-Thread").start();
     }
 
     private void stop() {
@@ -49,7 +50,6 @@ public class GameLoop implements Runnable{
     }
 
     private void tick() {
-    	//System.out.println(gPanel.getState());
     	//main tick method while game is running
     	level = gPanel.getLevel();
     	
@@ -60,6 +60,7 @@ public class GameLoop implements Runnable{
 	    	
 	    	Level lvl = gPanel.getLevel();
 			ArrayList<Enemy> enemys = lvl.getEnemys();
+			ArrayList<StaticEnemy> staticEnemys = lvl.getStaticEnemys();
 			ArrayList<Trigger> trigger = lvl.getTriggerList();
 			Boss b = lvl.getBoss();
 			
@@ -67,6 +68,16 @@ public class GameLoop implements Runnable{
 			for(int i = 0; i < enemys.size(); i++) {
 				enemys.get(i).move();
 				enemys.get(i).tick(level.getObjects());
+			}
+			for(int i = 0; i < staticEnemys.size(); i++) {
+				staticEnemys.get(i).tick(level.getObjects(), player);
+				//bullets
+				ArrayList<AdvancedBullet> enemyBulletList = staticEnemys.get(i).getBulletList();
+				for(int j = 0; j < enemyBulletList.size(); j++) {
+					if(enemyBulletList.get(j).isAlive()) {
+						enemyBulletList.get(j).move();
+					}
+				}
 			}
 			
 			//trigger

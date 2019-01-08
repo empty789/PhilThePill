@@ -12,55 +12,39 @@ import objects.ObjectType;
 import objects.misc.AdvancedBullet;
 
 
-public class Boss extends Object{
+public class StaticEnemy extends Object{
 	
-	private float velX, velY;
-	private boolean isAlive, shooting;
-	private int hitpoints;
+	private boolean isAlive, right;
+	private BufferedImage image_r, image_l;
 	private ArrayList<AdvancedBullet> bulletList;
 	private int cooldown;
-	private BufferedImage image, image_shoot;
 	
-	public Boss(int x, int y, int width, int height) {
+	public StaticEnemy(int x, int y, int width, int height) {
 		setX(x);
 		setY(y);
 		setWidth(width);
 		setHeight(height);
 		isAlive = true;
-		setType(ObjectType.BOSS);
-		velY = 2;
-		hitpoints = 100;
-		cooldown = 0;
-		shooting = false;
-		//bullet = new AdvancedBullet(ObjectType.BOSS, new Point(getX(), getY()), 10, 10, 700);
+		setType(ObjectType.ENTITYSTATIC);
+		right = false;
 		bulletList = new ArrayList<AdvancedBullet>();
+		cooldown = 0;
 	}	
 	
-	public void move() {
-		setY(getY()+(int) velY);	
-	}
 	
 	public void tick(ArrayList<Object> obj, Player p) {
 		
-		for(int i = 0; i < obj.size(); i++) {
-			if(getBoundsTop().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE ) {
-				velY *=-1;
-				setY(obj.get(i).getY()+obj.get(i).getHeight()+5);
-				
-			}else if(getBounds().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE ) {
-				velY *=-1;
-				setY(obj.get(i).getY() - getHeight()-5);
-				
-			}
+		//get orientation
+		if(p.getX() > getX()) {
+			right = true;
+		}else {
+			right = false;
 		}
 		
 		//shoot
 		if(cooldown >= 200) {
-			shoot(p);
-			shooting = true;
-			cooldown = 0;
-		}else if(cooldown >= 30) {
-			shooting = false;	
+			shoot(p, right);
+			cooldown = 0;	
 		}
 		cooldown++;
 		//clear up dead bullets & collision
@@ -85,19 +69,18 @@ public class Boss extends Object{
 				bulletList.remove(i);
 			}
 		}
-
-		
 	}
 	
 	public void render(Graphics g) {
 		if(isAlive) {
 			if(getImages() != null) {
 				ArrayList<BufferedImage> images = getImages();
-				if(shooting) {
-					g.drawImage(images.get(1), getX(), getY(), getWidth(), getHeight(), null);
-				}else {
+				if(right) {
 					g.drawImage(images.get(0), getX(), getY(), getWidth(), getHeight(), null);
+				}else {
+					g.drawImage(images.get(1), getX(), getY(), getWidth(), getHeight(), null);
 				}
+				
 			}else {
 				g.setColor(getColor());
 				g.fillRect(getX(), getY(), getWidth(), getHeight());
@@ -105,28 +88,40 @@ public class Boss extends Object{
 		}
 	}
 	
-	public void setImage(BufferedImage image, BufferedImage image_shoot) {
-		this.image = image;
-		this.image_shoot = image_shoot;
-	}
-	
-	public ArrayList<BufferedImage> getImages() {
-		if(image == null || image_shoot == null)
-			return null;
-		
-		ArrayList<BufferedImage> result = new ArrayList<BufferedImage>();
-		result.add(image);
-		result.add(image_shoot);
-		
-		return result;
-	}
-	
-	public void shoot(Player p) {
-		bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , p.getCenterPosition(), 10, 10, 100, Color.MAGENTA.darker()));
+	public void shoot(Player p, boolean right) {
+		Point point = getPosition();
+		if(right) {
+			point.setLocation(getX()+getWidth()-20, getY()+getHeight()/2);
+			bulletList.add(new AdvancedBullet(ObjectType.BOSS, point , p.getCenterPosition(), 10, 10, 100, Color.PINK));
+		}else {
+			point.setLocation(getX()-10, getY()+getHeight()/2);
+			bulletList.add(new AdvancedBullet(ObjectType.BOSS, point , p.getCenterPosition(), 10, 10, 100, Color.PINK));
+		}
 	}
 	
 	public ArrayList<AdvancedBullet> getBulletList() {
 		return bulletList;
+	}
+	
+	private Point getPosition() {
+		return new Point(getX(), getY());
+	}
+
+
+	public void setImage(BufferedImage r, BufferedImage l) {
+		image_r = r;
+		image_l = l;
+	}
+	
+	public ArrayList<BufferedImage> getImages() {
+		if(image_r == null || image_l == null)
+			return null;
+		
+		ArrayList<BufferedImage> result = new ArrayList<BufferedImage>();
+		result.add(image_r);
+		result.add(image_l);
+		
+		return result;
 	}
 	
 	public boolean isAlive() {
@@ -137,29 +132,16 @@ public class Boss extends Object{
 		this.isAlive = isAlive;
 	}
 
-	public Point getPosition() {
-		return new Point(getX(), getY());
-	}
-	
-	public int getHitpoints() {
-		return hitpoints;
-	}
-
-	public void setHitpoints(int hitpoints) {
-		this.hitpoints = hitpoints;
-	}
-
-
 	public Rectangle getBox() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());
 	}
 	//bot
 	public Rectangle getBounds() {
-		return new Rectangle(getX()+(getWidth()/2)-((getWidth()/2)/2), getY()+(getHeight()/2)+3, getWidth()/2, getHeight()/2);
+		return new Rectangle(getX()+(getWidth()/2)-((getWidth()/2)/2), getY()+(getHeight()/2), getWidth()/2, getHeight()/2);
 	}
 	
 	public Rectangle getBoundsTop() {
-		return new Rectangle(getX()+(getWidth()/2)-((getWidth()/2)/2), getY()-3, getWidth()/2, getHeight()/2);
+		return new Rectangle(getX()+(getWidth()/2)-((getWidth()/2)/2), getY(), getWidth()/2, getHeight()/2);
 	}
 	
 	public Rectangle getBoundsRight() {

@@ -34,7 +34,7 @@ public class InputManager implements KeyListener, MouseInputListener{
 		int mX = e.getX();
 		int mY = e.getY();
 		
-		if(gPanel.getState() == GameState.MENU || gPanel.getState() == GameState.PAUSE || gPanel.getState() == GameState.VICTORY || gPanel.getState() == GameState.ARIGHT || gPanel.getState() == GameState.AWRONG) {
+		if(gPanel.getState() == GameState.MENU || gPanel.getState() == GameState.PAUSE || gPanel.getState() == GameState.VICTORY || gPanel.getState() == GameState.ARIGHT || gPanel.getState() == GameState.AWRONG || gPanel.getState() == GameState.MINIGAME || gPanel.getState() == GameState.GAMEOVER) {
 			for(int i = 0; i < items.size(); i++) {
 				if(items.get(i).getBounds().contains(mX, mY) && items.get(i).isVisible() == true) {
 					if(items.get(i).getAction().equals("STARTBUTTON")) {
@@ -52,12 +52,20 @@ public class InputManager implements KeyListener, MouseInputListener{
 						gPanel.setCurrentLevel(gPanel.getCurrentLevel()+1);
 						gPanel.setState(GameState.LEVELOVERVIEW);
 						keys = 0;
+					}else if(items.get(i).getAction().equals("PIPEJOKER")) {
+						gPanel.ShowHint();
 					}else if(items.get(i).getAction().equals("RIGHTBUTTON") || items.get(i).getAction().equals("WRONGBUTTON")) {
-						if(items.get(i).getAction().equals("WRONGBUTTON"))
-							player.setLifes(player.getLifes()-1);
-						gPanel.setState(GameState.RUNNING);
-						keys = 0;
+						gPanel.setShowHint(false);
+						gPanel.resetAnswerColor();
 						player.resetMovement();
+						keys = 0;
+						gPanel.setState(GameState.RUNNING);
+						if(items.get(i).getAction().equals("WRONGBUTTON"))
+							
+							player.setLifes(player.getLifes()-1);
+							
+							
+							
 					}
 	
 				}

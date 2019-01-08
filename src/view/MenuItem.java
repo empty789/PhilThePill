@@ -20,6 +20,7 @@ public class MenuItem {
 	private BufferedImage icon;
 	private int ticks;
 
+
 	
 	public MenuItem(int x, int y, int width, int height, Font font, Color c, String title, String action) {
 		this.x = x;
@@ -96,6 +97,11 @@ public class MenuItem {
 	}
 	
 	
+	
+	public void setC(Color c) {
+		this.c = c;
+	}
+
 	public void render(Graphics g) {
 		g.setFont(font);
 		g.setColor(c);
