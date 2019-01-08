@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import controller.LevelManager;
+import objects.Object;
 import objects.ObjectType;
 import objects.entities.Boss;
 import objects.entities.Enemy;
@@ -14,6 +15,7 @@ import objects.level.Level;
 import objects.misc.AdvancedBullet;
 import objects.misc.Trigger;
 import objects.obstacles.Block;
+import objects.obstacles.TimedBlock;
 import view.Camera;
 import view.GamePanel;
 import view.MainWindow;
@@ -54,7 +56,8 @@ public class GameLoop implements Runnable{
     	level = gPanel.getLevel();
     	
     	if(gPanel.getState() == GameState.RUNNING) {
-			player.tick(level.getObjects());
+    		ArrayList<Object> objectList = level.getObjects();
+			player.tick(objectList);
 			player.move();
 	    	cam.tick(player);
 	    	
@@ -64,13 +67,21 @@ public class GameLoop implements Runnable{
 			ArrayList<Trigger> trigger = lvl.getTriggerList();
 			Boss b = lvl.getBoss();
 			
+			//timedblocks
+			for(int i = 0; i < objectList.size(); i++) {
+				if(objectList.get(i).getType() == ObjectType.TIMEDOBSTACLE) {
+					TimedBlock tBlock = (TimedBlock) objectList.get(i);
+					tBlock.tick();
+				}
+			}
+			
 			//enemys
 			for(int i = 0; i < enemys.size(); i++) {
 				enemys.get(i).move();
-				enemys.get(i).tick(level.getObjects());
+				enemys.get(i).tick(objectList);
 			}
 			for(int i = 0; i < staticEnemys.size(); i++) {
-				staticEnemys.get(i).tick(level.getObjects(), player);
+				staticEnemys.get(i).tick(objectList, player);
 				//bullets
 				ArrayList<AdvancedBullet> enemyBulletList = staticEnemys.get(i).getBulletList();
 				for(int j = 0; j < enemyBulletList.size(); j++) {

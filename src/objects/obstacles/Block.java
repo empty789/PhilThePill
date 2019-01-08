@@ -6,6 +6,7 @@ import objects.ObjectType;
 
 public class Block extends Object {
 
+
 	
 	public Block(int x, int y, int width, int height, Color color) {
 		setType(ObjectType.OBSTACLE);
@@ -14,5 +15,10 @@ public class Block extends Object {
 		setWidth(width);
 		setHeight(height);
 		setColor(color);
+
 	}
+
+
+	
+	
 }

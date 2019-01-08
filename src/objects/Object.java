@@ -12,6 +12,7 @@ public class Object {
 	private ObjectType type;
 	private Color color;
 	private BufferedImage image;
+	boolean alive;
 	
 	public Object() {
 		x  = 0;
@@ -21,6 +22,7 @@ public class Object {
 		type = ObjectType.UNDEFINED;
 		color = Color.BLACK;
 		image = null;
+		alive = true;
 	}
 	
 	public Rectangle getBounds() {
@@ -97,6 +99,12 @@ public class Object {
 	public BufferedImage getImage() {
 		return image;
 	}
-	
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
 	
 }

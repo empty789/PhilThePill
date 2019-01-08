@@ -327,7 +327,7 @@ public class GamePanel extends JPanel{
 			for(int i = 0; i < level.getObjects().size(); i++) {
 				Object obj = level.getObjects().get(i);
 				
-				if(visibleScreen.intersects(obj.getBounds())) {
+				if(visibleScreen.intersects(obj.getBounds()) && obj.isAlive()) {
 					obj.render(g);
 				}
 	

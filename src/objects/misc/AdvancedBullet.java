@@ -9,7 +9,7 @@ import objects.ObjectType;
 public class AdvancedBullet extends Object{
 
 	private ObjectType owner;
-	private Boolean isAlive;
+
 	private int lifeTime, speed, dmg;
 	private Point cPos;
 	private Point pPos;
@@ -32,7 +32,7 @@ public class AdvancedBullet extends Object{
 		this.dmg = dmg;
 		this.lifeTime = lifeTime;
 		setColor(c);
-		isAlive = true;
+
 		
 	}
 
@@ -64,7 +64,7 @@ public class AdvancedBullet extends Object{
 			lifeTime-=1;
 	
 		}else {
-			isAlive = false;
+			setAlive(false);
 		}
 	}
 
@@ -74,17 +74,16 @@ public class AdvancedBullet extends Object{
 
 	}
 
-	public Boolean isAlive() {
-		return isAlive;
-	}
 
-	public void setIsAlive(Boolean isAlive) {
-		this.isAlive = isAlive;
-	}
 
 	public ObjectType getOwner() {
 		return owner;
 	}
+
+	public int getDmg() {
+		return dmg;
+	}
+	
 	
 	
 	

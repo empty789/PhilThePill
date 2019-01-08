@@ -15,7 +15,9 @@ import objects.ObjectType;
 import objects.items.EnergyDrink;
 import objects.items.Life;
 import objects.items.Pipe;
+import objects.misc.AdvancedBullet;
 import objects.misc.Bullet;
+import objects.obstacles.TimedBlock;
 
 public class Player extends Object {
 
@@ -47,7 +49,7 @@ public class Player extends Object {
 		setHeight(HEIGHT);
 		setColor(Color.RED);
 		spawn = new Point(getX(), getY());
-		
+
 		
 		lifes = 3;
 		pipes = 0;
@@ -56,7 +58,7 @@ public class Player extends Object {
 		immuneTime = 0; 
 		bullet = new Bullet(ObjectType.PLAYER, 20, 700);
 		images = new ArrayList<BufferedImage>(); // idle, left, l_fall, l_jump, right, r_fall, r_jump
-		for(int i = 0; i < 7; i++) {
+		for(int i = 0; i < 9; i++) {
 			try {
 				images.add(ImageIO.read(Player.class.getResource("/image/player/"+i+".png")));
 			} catch (IOException e) {
@@ -84,7 +86,13 @@ public class Player extends Object {
 				g.drawImage(images.get(4),getX(), getY(), getWidth(), getHeight(), null);
 			}
 		}else {
-			g.drawImage(images.get(0),getX(), getY(), getWidth(), getHeight(), null);
+			if(velY > 2) {
+				g.drawImage(images.get(7),getX(), getY(), getWidth(), getHeight(), null);
+			}else if(velY < 0) {
+				g.drawImage(images.get(8),getX(), getY(), getWidth(), getHeight(), null);
+			}else {
+				g.drawImage(images.get(0),getX(), getY(), getWidth(), getHeight(), null);
+			}
 		}
 	}
 	
@@ -143,13 +151,20 @@ public class Player extends Object {
 		for(int i = 0; i < obj.size(); i++) {
 			//System.out.println(velY);
 			//obstacle collision
-			if(getBoundsTop().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE ) {
+			if(getBoundsTop().intersects(obj.get(i).getBounds()) && obj.get(i).isAlive() && (obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE)) {
 				setY(obj.get(i).getY()+obj.get(i).getHeight());
 				velY = 0;
 
 			}
 			
-			if(getBounds().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE ) {
+			if(getBounds().intersects(obj.get(i).getBounds()) && obj.get(i).isAlive() && (obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) ) {
+				if(obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) {
+					TimedBlock tBlock = (TimedBlock) obj.get(i);
+					tBlock.setActivated(true);
+					falling = true;
+				}else {
+					falling = false;
+				}
 				//work on this, workaround for flickering
 				if(big)
 					setY(obj.get(i).getY()-getHeight()+1);
@@ -158,7 +173,7 @@ public class Player extends Object {
 					setY(obj.get(i).getY()-getHeight());
 				
 				velY = 0;
-				falling = false;
+				//falling = false;
 				jumping = false;
 				
 			}else {
@@ -169,12 +184,12 @@ public class Player extends Object {
 				
 			}
 			
-			if(getBoundsRight().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE ) {
+			if(getBoundsRight().intersects(obj.get(i).getBounds()) && obj.get(i).isAlive() && (obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) ) {
 				setX(obj.get(i).getX()-getWidth());
 
 			}
 			
-			if(getBoundsLeft().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE ) {
+			if(getBoundsLeft().intersects(obj.get(i).getBounds()) && obj.get(i).isAlive() && (obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) ) {
 				setX(obj.get(i).getX() + obj.get(i).getWidth());
 
 
@@ -205,7 +220,14 @@ public class Player extends Object {
 					e.setAlive(false);
 				}
 			}
-
+			
+			//boss collision
+			if(obj.get(i).getType() == ObjectType.BOSS){
+				Boss b = (Boss)obj.get(i);
+				if(getBounds().intersects(b.getBox()) && !immune) {
+					getDamage();
+				}
+			}
 			
 			
 			//enemy collision
@@ -231,7 +253,7 @@ public class Player extends Object {
 			
 			//bullet collision
 			if(bullet.isAlive() ) {
-				if(obj.get(i).getType() == ObjectType.OBSTACLE && bullet.getBounds().intersects(obj.get(i).getBounds())) {
+				if(obj.get(i).getType() == ObjectType.OBSTACLE  && bullet.getBounds().intersects(obj.get(i).getBounds())) {
 					bullet.setAlive(false);
 					bullet.resetRange();
 				}else if(obj.get(i).getType() == ObjectType.ENTITY){
@@ -240,6 +262,7 @@ public class Player extends Object {
 						e.setAlive(false);
 						bullet.setAlive(false);
 						bullet.resetRange();
+
 					}
 					
 				}else if(obj.get(i).getType() == ObjectType.BOSS){
@@ -278,22 +301,27 @@ public class Player extends Object {
 	}
 	
 	public void shoot() {
+		Point p = getCenterPosition();
+		
+		
 		if(!bullet.isAlive()) {
 			if(right) {
+
+				bullet.setAlive(true);
 				bullet.setX(getX()+50);
 				bullet.setY(getY()+20);
 				bullet.setVelX(Math.abs(bullet.getVelX()));
 				bullet.setStart(new Point(bullet.getX(), bullet.getY()));
-				bullet.setAlive(true);
 			}else if(left) {
+
+				bullet.setAlive(true);
 				bullet.setX(getX());
 				bullet.setY(getY()+20);
 				bullet.setVelX(Math.abs(bullet.getVelX())*-1);
 				bullet.setStart(new Point(bullet.getX(), bullet.getY()));
-				bullet.setAlive(true);	
 			}
 			
-			
+
 		}
 	}
 	

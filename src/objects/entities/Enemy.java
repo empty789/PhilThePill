@@ -12,7 +12,6 @@ import objects.ObjectType;
 public class Enemy extends Object{
 	
 	private float velX;
-	private boolean isAlive;
 	private BufferedImage image_r, image_l;
 	
 	public Enemy(int x, int y, int width, int height) {
@@ -20,7 +19,6 @@ public class Enemy extends Object{
 		setY(y);
 		setWidth(width);
 		setHeight(height);
-		isAlive = true;
 		setType(ObjectType.ENTITY);
 		velX = 1;
 	}	
@@ -51,7 +49,7 @@ public class Enemy extends Object{
 	}
 	
 	public void render(Graphics g) {
-		if(isAlive) {
+		if(isAlive()) {
 			if(getImages() != null) {
 				ArrayList<BufferedImage> images = getImages();
 				if(velX > 0) {
@@ -83,13 +81,7 @@ public class Enemy extends Object{
 		return result;
 	}
 	
-	public boolean isAlive() {
-		return isAlive;
-	}
 
-	public void setAlive(boolean isAlive) {
-		this.isAlive = isAlive;
-	}
 
 	public Rectangle getBox() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());

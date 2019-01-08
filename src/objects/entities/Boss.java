@@ -15,7 +15,7 @@ import objects.misc.AdvancedBullet;
 public class Boss extends Object{
 	
 	private float velX, velY;
-	private boolean isAlive, shooting;
+	private boolean shooting;
 	private int hitpoints;
 	private ArrayList<AdvancedBullet> bulletList;
 	private int cooldown;
@@ -26,7 +26,6 @@ public class Boss extends Object{
 		setY(y);
 		setWidth(width);
 		setHeight(height);
-		isAlive = true;
 		setType(ObjectType.BOSS);
 		velY = 2;
 		hitpoints = 100;
@@ -43,11 +42,11 @@ public class Boss extends Object{
 	public void tick(ArrayList<Object> obj, Player p) {
 		
 		for(int i = 0; i < obj.size(); i++) {
-			if(getBoundsTop().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE ) {
+			if(getBoundsTop().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) {
 				velY *=-1;
 				setY(obj.get(i).getY()+obj.get(i).getHeight()+5);
 				
-			}else if(getBounds().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE ) {
+			}else if(getBounds().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) {
 				velY *=-1;
 				setY(obj.get(i).getY() - getHeight()-5);
 				
@@ -68,8 +67,8 @@ public class Boss extends Object{
 			//block
 			for(int j = 0; j < obj.size(); j++) {
 				if(bulletList.get(i).getBounds().intersects(obj.get(j).getBounds())) {
-					if(obj.get(j).getType() == ObjectType.OBSTACLE ) {
-						bulletList.get(i).setIsAlive(false);		
+					if(obj.get(j).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) {
+						bulletList.get(i).setAlive(false);		
 					}
 				}
 			}
@@ -77,7 +76,7 @@ public class Boss extends Object{
 			
 			//player
 			if(bulletList.get(i).getBounds().intersects(p.getBox())) {
-				bulletList.get(i).setIsAlive(false);
+				bulletList.get(i).setAlive(false);
 				p.getDamage();
 			}
 			
@@ -90,7 +89,7 @@ public class Boss extends Object{
 	}
 	
 	public void render(Graphics g) {
-		if(isAlive) {
+		if(isAlive()) {
 			if(getImages() != null) {
 				ArrayList<BufferedImage> images = getImages();
 				if(shooting) {
@@ -129,13 +128,7 @@ public class Boss extends Object{
 		return bulletList;
 	}
 	
-	public boolean isAlive() {
-		return isAlive;
-	}
 
-	public void setAlive(boolean isAlive) {
-		this.isAlive = isAlive;
-	}
 
 	public Point getPosition() {
 		return new Point(getX(), getY());

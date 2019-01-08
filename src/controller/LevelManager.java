@@ -16,6 +16,7 @@ import objects.items.Pipe;
 import objects.level.Level;
 import objects.misc.Trigger;
 import objects.obstacles.Block;
+import objects.obstacles.TimedBlock;
 import view.GamePanel;
 import view.LevelItem;
 import view.MainWindow;
@@ -53,7 +54,9 @@ public class LevelManager {
 		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
 		level.add(new Block(300, maxH-300, 400, 50, Color.BLUE));
 		
-		level.add(new StaticEnemy(1000, maxH-600, 100, 100));
+		//level.add(new StaticEnemy(1000, maxH-600, 100, 100));
+		
+		level.add(new TimedBlock(1200, maxH-400, 300, 50, Color.GREEN, true, 2));
 		
 		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));
 		level.add(new Block(1000, maxH-40-300-101, 100, 300, Color.YELLOW));

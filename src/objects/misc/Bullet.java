@@ -7,7 +7,6 @@ import objects.ObjectType;
 public class Bullet extends Object{
 	
 	private ObjectType owner;
-	private Boolean isAlive;
 	private float velX;
 	private Point start;
 	private int range, rangeDecay, dmg;
@@ -20,8 +19,8 @@ public class Bullet extends Object{
 		this.range = range;
 		this.dmg = dmg;
 		velX = 10.0f;
-		isAlive = false;
 		setType(ObjectType.BULLET);
+		setAlive(true);
 	}
 	
 	
@@ -33,8 +32,9 @@ public class Bullet extends Object{
 			
 			rangeDecay -=Math.abs(velX);
 		}else {
-			isAlive = false;
+			setAlive(false);
 			rangeDecay = range;
+			System.out.println("test123");
 		}
 		
 		
@@ -51,14 +51,6 @@ public class Bullet extends Object{
 	}
 
 
-	public Boolean isAlive() {
-		return isAlive;
-	}
-
-
-	public void setAlive(Boolean isAlive) {
-		this.isAlive = isAlive;
-	}
 
 	public void resetRange() {
 		rangeDecay = range;

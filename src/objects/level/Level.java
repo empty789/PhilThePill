@@ -12,6 +12,7 @@ import objects.entities.StaticEnemy;
 import objects.items.Life;
 import objects.misc.Trigger;
 import objects.obstacles.Block;
+import objects.obstacles.TimedBlock;
 
 public class Level {
 
@@ -63,6 +64,10 @@ public class Level {
 		if(obj.getType() == ObjectType.OBSTACLE) {
 			Block block = new Block(obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight(), obj.getColor());
 			dObject = block;
+		}else if(obj.getType() == ObjectType.TIMEDOBSTACLE) {
+				TimedBlock temp = (TimedBlock) obj;
+				TimedBlock block = new TimedBlock(obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight(), obj.getColor(), temp.isRespawn(), temp.getTime());
+				dObject = block;
 		}else if(obj.getType() == ObjectType.LIFE) {
 			Life live = new Life(obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight(), obj.getColor());
 			dObject = live;
