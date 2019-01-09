@@ -56,7 +56,8 @@ public class LevelManager {
 		
 		//level.add(new StaticEnemy(1000, maxH-600, 100, 100));
 		
-		level.add(new TimedBlock(1200, maxH-400, 300, 50, Color.GREEN, true, 2));
+		level.add(new TimedBlock(1200, maxH-800, 300, 50, Color.GREEN, true, 2));
+
 		
 		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));
 		level.add(new Block(1000, maxH-40-300-101, 100, 300, Color.YELLOW));
@@ -65,7 +66,7 @@ public class LevelManager {
 		level.add(new Life(500, 600, 50, 50, Color.RED));
 		level.add(new Pipe(800, 600, 60, 20, Color.GREEN));
 		level.add(new EnergyDrink(1200, maxH-40-60, 20, 40, Color.YELLOW));
-		level.add(new Enemy(1200, maxH-40-100, 80, 80));
+		level.add(new Enemy(1200, maxH-40-100, 80, 80, 2, true));
 		
 		//boss
 		level.add(new Block(2000, maxH-40-1000, 100, 800, Color.GREEN));
@@ -114,13 +115,13 @@ public class LevelManager {
 		level.add(new Life(5230,100, 20, 20, Color.RED));
 		level.add(new Pipe(3200, maxH-40-360, 20, 20, Color.GREEN));
 		level.add(new EnergyDrink(4250, maxH-400-100, 20, 20, Color.YELLOW));
-		level.add(new Enemy(800, maxH-40-100, 80, 80));
-		level.add(new Enemy(1900, maxH-40-100, 60, 60));
-		level.add(new Enemy(3700, maxH-100-100, 40, 40));
-		level.add(new Enemy(2600, maxH-300-100, 60, 60));
-		level.add(new Enemy(4650, maxH-40-100, 60, 60));
-		level.add(new Enemy(3300, maxH-400-100, 60, 60));
-		level.add(new Enemy(1700, maxH-400-100, 40, 40));
+		level.add(new Enemy(800, maxH-40-100, 80, 80, 2, false));
+		level.add(new Enemy(1900, maxH-40-100, 60, 60, 2, false));
+		level.add(new Enemy(3700, maxH-100-100, 40, 40, 2, false));
+		level.add(new Enemy(2600, maxH-300-100, 60, 60, 2, false));
+		level.add(new Enemy(4650, maxH-40-100, 60, 60, 2, false));
+		level.add(new Enemy(3300, maxH-400-100, 60, 60, 2, false));
+		level.add(new Enemy(1700, maxH-400-100, 40, 40, 2, false));
 		
 		//boss
 		level.add(new Block(6000, maxH-40-1000, 100, 800, Color.GREEN));
@@ -148,7 +149,7 @@ public class LevelManager {
 		
 		level.add(new Life(500, 600, 20, 20, Color.RED));
 		level.add(new Pipe(800, 600, 20, 20, Color.GREEN));
-		level.add(new Enemy(1200, maxH-40-100, 80, 80));
+		level.add(new Enemy(1200, maxH-40-100, 80, 80, 2, false));
 		
 		//boss
 		level.add(new Block(2000, maxH-40-1100, 100, 900, Color.GREEN));
@@ -173,7 +174,7 @@ public class LevelManager {
 		
 		level.add(new Life(500, 600, 50, 50, Color.RED));
 		level.add(new Pipe(800, 600, 60, 20, Color.GREEN));
-		level.add(new Enemy(1200, maxH-40-100, 80, 80));
+		level.add(new Enemy(1200, maxH-40-100, 80, 80, 2, false));
 		
 		//boss
 		level.add(new Block(2000, maxH-40-1100, 100, 900, Color.GREEN));

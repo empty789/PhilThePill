@@ -11,39 +11,64 @@ import objects.ObjectType;
 
 public class Enemy extends Object{
 	
-	private float velX;
+	private float vel;
 	private BufferedImage image_r, image_l;
+	private boolean up, right;
 	
-	public Enemy(int x, int y, int width, int height) {
+	public Enemy(int x, int y, int width, int height, float vel, boolean up) {
 		setX(x);
 		setY(y);
 		setWidth(width);
 		setHeight(height);
 		setType(ObjectType.ENTITY);
-		velX = 1;
+		this.vel = vel;
+		this.up = up;
+		right = false;
 	}	
 	
 	public void move() {
 		
 		
-		
-		setX(getX()+(int) velX);
+		if(up) {
+			setY(getY()+(int) vel);
+		}else {
+			setX(getX()+(int) vel);
+		}
 		
 		
 	}
 	
-	public void tick(ArrayList<Object> obj) {
+	public void tick(ArrayList<Object> obj, Player p) {
 		
 		for(int i = 0; i < obj.size(); i++) {
-			if(getBoundsRight().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE ) {
+			if(getBoundsRight().intersects(obj.get(i).getBounds())&& obj.get(i).isAlive() && (obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) ) {
 				setX(obj.get(i).getX()-getWidth());
-				velX *=-1;
+				vel *=-1;
 			}
 			
-			if(getBoundsLeft().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE ) {
+			if(getBoundsLeft().intersects(obj.get(i).getBounds())&& obj.get(i).isAlive() && (obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) ) {
 				setX(obj.get(i).getX() + obj.get(i).getWidth());
-				velX *=-1;
+				vel *=-1;
 	
+			}
+			
+			if(getBoundsTop().intersects(obj.get(i).getBounds()) && obj.get(i).isAlive() && (obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE)) {
+				vel *=-1;
+				setY(obj.get(i).getY()+obj.get(i).getHeight()+5);
+				
+			}else if(getBounds().intersects(obj.get(i).getBounds()) && obj.get(i).isAlive() && (obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE)) {
+				vel *=-1;
+				setY(obj.get(i).getY() - getHeight()-5);
+				
+			}
+		}
+		
+		if(up) {
+			//get orientation
+			if(p.getX() > getX()) {
+				right = true;
+			}else {
+				right = false;
 			}
 		}
 	}
@@ -52,10 +77,18 @@ public class Enemy extends Object{
 		if(isAlive()) {
 			if(getImages() != null) {
 				ArrayList<BufferedImage> images = getImages();
-				if(velX > 0) {
-					g.drawImage(images.get(0), getX(), getY(), getWidth(), getHeight(), null);
+				if(up) {
+					if(right) {
+						g.drawImage(images.get(0), getX(), getY(), getWidth(), getHeight(), null);
+					}else {
+						g.drawImage(images.get(1), getX(), getY(), getWidth(), getHeight(), null);
+					}
 				}else {
-					g.drawImage(images.get(1), getX(), getY(), getWidth(), getHeight(), null);
+					if(vel > 0) {
+						g.drawImage(images.get(0), getX(), getY(), getWidth(), getHeight(), null);
+					}else {
+						g.drawImage(images.get(1), getX(), getY(), getWidth(), getHeight(), null);
+					}
 				}
 				
 			}else {
@@ -82,6 +115,14 @@ public class Enemy extends Object{
 	}
 	
 
+
+	public float getVel() {
+		return vel;
+	}
+
+	public boolean isUp() {
+		return up;
+	}
 
 	public Rectangle getBox() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());

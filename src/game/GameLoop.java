@@ -77,8 +77,9 @@ public class GameLoop implements Runnable{
 			
 			//enemys
 			for(int i = 0; i < enemys.size(); i++) {
+
 				enemys.get(i).move();
-				enemys.get(i).tick(objectList);
+				enemys.get(i).tick(objectList, player);
 			}
 			for(int i = 0; i < staticEnemys.size(); i++) {
 				staticEnemys.get(i).tick(objectList, player);

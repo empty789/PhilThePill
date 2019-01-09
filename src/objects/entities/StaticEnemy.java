@@ -124,13 +124,6 @@ public class StaticEnemy extends Object{
 		return result;
 	}
 	
-	public boolean isAlive() {
-		return isAlive;
-	}
-
-	public void setAlive(boolean isAlive) {
-		this.isAlive = isAlive;
-	}
 
 	public Rectangle getBox() {
 		return new Rectangle(getX(), getY(), getWidth(), getHeight());

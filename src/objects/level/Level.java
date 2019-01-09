@@ -72,8 +72,10 @@ public class Level {
 			Life live = new Life(obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight(), obj.getColor());
 			dObject = live;
 		}else if(obj.getType() == ObjectType.ENTITY) {
-			Enemy enemy = new Enemy(obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight());
+			Enemy e = (Enemy)obj;
+			Enemy enemy = new Enemy(e.getX(), e.getY(), e.getWidth(), e.getHeight(), e.getVel(), e.isUp());
 			dObject = enemy;
+			
 		}else if(obj.getType() == ObjectType.ENTITYSTATIC) {
 			StaticEnemy enemy = new StaticEnemy(obj.getX(), obj.getY(), obj.getWidth(), obj.getHeight());
 			dObject = enemy;

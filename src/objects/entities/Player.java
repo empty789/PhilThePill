@@ -232,15 +232,15 @@ public class Player extends Object {
 			
 			//enemy collision
 			if(obj.get(i).getType() == ObjectType.ENTITY){
-				Enemy e = (Enemy)obj.get(i);
-				if(e.isAlive() && !immune) {
-					if(getBounds().intersects(e.getBoundsTop())) {
-						e.setAlive(false);
-					}else if(getBoundsRight().intersects(e.getBox())) {
+
+				if(obj.get(i).isAlive() && !immune) {
+					if(getBounds().intersects(obj.get(i).getBoundsTop())) {
+						obj.get(i).setAlive(false);
+					}else if(getBoundsRight().intersects(obj.get(i).getBounds())) {
 						getDamage();	
-					}else if(getBoundsLeft().intersects(e.getBox())) {
+					}else if(getBoundsLeft().intersects(obj.get(i).getBounds())) {
 						getDamage();
-					}else if(getBoundsTop().intersects(e.getBox())) {
+					}else if(getBoundsTop().intersects(obj.get(i).getBounds())) {
 						getDamage();
 					}
 				}
