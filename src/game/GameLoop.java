@@ -121,7 +121,12 @@ public class GameLoop implements Runnable{
 			b.tick(level.getObjects(), player);
 			ArrayList<AdvancedBullet> bulletList = b.getBulletList();
 			for(int i = 0; i < bulletList.size(); i++) {
-				bulletList.get(i).move();
+				if(player.getX()+mw.getMaxWidth()/2 <= b.getX()) {
+					bulletList.remove(i);
+				}else {
+					bulletList.get(i).move();
+				}
+				
 			}
 			
 			if(b.getHitpoints() <= 0) {

@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
 
 import objects.Object;
 import objects.ObjectType;
@@ -20,6 +21,7 @@ public class Boss extends Object{
 	private ArrayList<AdvancedBullet> bulletList;
 	private int cooldown;
 	private BufferedImage image, image_shoot;
+	private Random rand;
 	
 	public Boss(int x, int y, int width, int height) {
 		setX(x);
@@ -33,6 +35,7 @@ public class Boss extends Object{
 		shooting = false;
 		//bullet = new AdvancedBullet(ObjectType.BOSS, new Point(getX(), getY()), 10, 10, 700);
 		bulletList = new ArrayList<AdvancedBullet>();
+		rand = new Random();
 	}	
 	
 	public void move() {
@@ -53,10 +56,17 @@ public class Boss extends Object{
 
 			}
 		}
-		
+		int rCd = rand.nextInt(30);
 		//shoot
-		if(cooldown >= 200) {
-			shoot(p);
+		if(cooldown >= 100+rCd) {
+			int r = rand.nextInt(10);
+			
+			if(r >= 4) {
+				shoot(p, true);
+			}else {
+				shoot(p, false);
+			}
+			
 			shooting = true;
 			cooldown = 0;
 		}else if(cooldown >= 30) {
@@ -121,8 +131,57 @@ public class Boss extends Object{
 		return result;
 	}
 	
-	public void shoot(Player p) {
-		bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , p.getCenterPosition(), 10, 10, 100, Color.MAGENTA.darker()));
+	public void shoot(Player p, boolean more) {
+		
+		if(more) {
+			int r = rand.nextInt(999);
+			System.out.println(r);
+			if(r % 2== 0) {
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , p.getCenterPosition(), 7, 10, 100, Color.MAGENTA.darker()));
+				Point po = new Point(p.getCenterPosition().x, p.getCenterPosition().y+200);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 7, 10, 100, Color.RED.darker()));
+				po = new Point(p.getCenterPosition().x, p.getCenterPosition().y-200);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 7, 10, 100, Color.MAGENTA.darker()));
+				
+			}else
+			if(r % 3== 0) {
+				Point po = new Point(getPosition().x-600, getPosition().y-400);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.RED.darker()));
+				po = new Point(getPosition().x-600, getPosition().y-300);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.MAGENTA));
+				po = new Point(getPosition().x-600, getPosition().y-200);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.RED.darker()));
+				po = new Point(getPosition().x-600, getPosition().y-100);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.MAGENTA.darker()));
+				po = new Point(getPosition().x-600, getPosition().y);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.RED.darker()));
+			}else
+			if(r % 5== 0) {
+				Point po = new Point(getPosition().x-500, getPosition().y+400);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.MAGENTA.darker()));
+				po = new Point(getPosition().x-600, getPosition().y+300);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.PINK.darker()));
+				po = new Point(getPosition().x-600, getPosition().y+200);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.MAGENTA));
+				po = new Point(getPosition().x-600, getPosition().y+100);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.PINK.darker()));
+				po = new Point(getPosition().x-600, getPosition().y);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.MAGENTA.darker()));
+			}else {
+				Point po = new Point(getPosition().x-300, getPosition().y+400);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.MAGENTA.darker()));
+				po = new Point(getPosition().x-400, getPosition().y+200);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.PINK.darker()));
+				po = new Point(getPosition().x-500, getPosition().y);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.BLACK));
+				po = new Point(getPosition().x-400, getPosition().y-200);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.PINK.darker()));
+				po = new Point(getPosition().x-300, getPosition().y-400);
+				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , po, 5, 10, 200, Color.MAGENTA.darker()));
+			}
+		}else {
+			bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , p.getCenterPosition(), 10, 10, 100, Color.MAGENTA.darker()));
+		}
 	}
 	
 	public ArrayList<AdvancedBullet> getBulletList() {

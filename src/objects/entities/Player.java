@@ -29,7 +29,7 @@ public class Player extends Object {
 	private final float MAX_VEL = 10;
 
 	
-	private int lifes, pipes;
+	private int lifes, pipes, ticks;
 	private boolean big;
 	private boolean immune;
 	private int immuneTime;
@@ -55,7 +55,8 @@ public class Player extends Object {
 		pipes = 0;
 		big = true;
 		immune = false;
-		immuneTime = 0; 
+		immuneTime = 0;
+		ticks = 0;
 		bullet = new Bullet(ObjectType.PLAYER, 20, 700);
 		images = new ArrayList<BufferedImage>(); // idle, left, l_fall, l_jump, right, r_fall, r_jump
 		for(int i = 0; i < 9; i++) {
@@ -69,31 +70,39 @@ public class Player extends Object {
 
 	
 	public void render(Graphics g) {
-		if(left) {
-			if(velY > 2) {//jump
-				g.drawImage(images.get(2),getX(), getY(), getWidth(), getHeight(), null);
-			}else if(velY < 0) {//fall
-				g.drawImage(images.get(3),getX(), getY(), getWidth(), getHeight(), null);
+		
+		if(immune && ticks >= 20) {
+			ticks = 0;
+		}else if(immune && ticks < 10) {
+				
+		}else if((immune && ticks < 20) || !immune) { 
+			if(left) {
+				if(velY > 2) {//jump
+					g.drawImage(images.get(2),getX(), getY(), getWidth(), getHeight(), null);
+				}else if(velY < 0) {//fall
+					g.drawImage(images.get(3),getX(), getY(), getWidth(), getHeight(), null);
+				}else {
+					g.drawImage(images.get(1),getX(), getY(), getWidth(), getHeight(), null);
+				}
+			}else if(right) {
+				if(velY > 2) {//jump
+					g.drawImage(images.get(5),getX(), getY(), getWidth(), getHeight(), null);
+				}else if(velY < 0) {//fall
+					g.drawImage(images.get(6),getX(), getY(), getWidth(), getHeight(), null);
+				}else {
+					g.drawImage(images.get(4),getX(), getY(), getWidth(), getHeight(), null);
+				}
 			}else {
-				g.drawImage(images.get(1),getX(), getY(), getWidth(), getHeight(), null);
-			}
-		}else if(right) {
-			if(velY > 2) {//jump
-				g.drawImage(images.get(5),getX(), getY(), getWidth(), getHeight(), null);
-			}else if(velY < 0) {//fall
-				g.drawImage(images.get(6),getX(), getY(), getWidth(), getHeight(), null);
-			}else {
-				g.drawImage(images.get(4),getX(), getY(), getWidth(), getHeight(), null);
-			}
-		}else {
-			if(velY > 2) {
-				g.drawImage(images.get(7),getX(), getY(), getWidth(), getHeight(), null);
-			}else if(velY < 0) {
-				g.drawImage(images.get(8),getX(), getY(), getWidth(), getHeight(), null);
-			}else {
-				g.drawImage(images.get(0),getX(), getY(), getWidth(), getHeight(), null);
+				if(velY > 2) {
+					g.drawImage(images.get(7),getX(), getY(), getWidth(), getHeight(), null);
+				}else if(velY < 0) {
+					g.drawImage(images.get(8),getX(), getY(), getWidth(), getHeight(), null);
+				}else {
+					g.drawImage(images.get(0),getX(), getY(), getWidth(), getHeight(), null);
+				}
 			}
 		}
+		ticks++;
 	}
 	
 	public void move() {
