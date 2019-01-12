@@ -30,7 +30,6 @@ public class TimedBlock extends Block {
 				
 			}
 			ticks++;
-			System.out.println(ticks+" respawn");
 		}else if(activated) {
 
 			if(ticks % (60/time) == 0) {
@@ -40,7 +39,6 @@ public class TimedBlock extends Block {
 				ticks = 0;
 			}
 			ticks++;
-			System.out.println(ticks+" active");
 		}
 		
 	}

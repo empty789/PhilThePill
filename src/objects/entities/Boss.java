@@ -37,19 +37,21 @@ public class Boss extends Object{
 	
 	public void move() {
 		setY(getY()+(int) velY);	
+		System.out.println("move");
 	}
 	
 	public void tick(ArrayList<Object> obj, Player p) {
 		
 		for(int i = 0; i < obj.size(); i++) {
-			if(getBoundsTop().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) {
+			if(getBoundsTop().intersects(obj.get(i).getBounds()) &&( obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE)) {
 				velY *=-1;
 				setY(obj.get(i).getY()+obj.get(i).getHeight()+5);
+				System.out.println("top");
 				
-			}else if(getBounds().intersects(obj.get(i).getBounds()) && obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE) {
+			}else if(getBounds().intersects(obj.get(i).getBounds()) &&( obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE)) {
 				velY *=-1;
 				setY(obj.get(i).getY() - getHeight()-5);
-				
+				System.out.println("bot");
 			}
 		}
 		
