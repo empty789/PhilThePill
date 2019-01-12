@@ -139,7 +139,7 @@ public class LevelManager {
 	}
 	
 	public void initLevel3() {
-		String victory = "";
+		String victory = "Du hast es geschafft, die Leber ist wieder gesund!";
 		level = new Level(new Point(400, 400), victory, "leber");
 		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
 		level.add(new Block(300, maxH-500, 400, 50, Color.BLUE));
@@ -164,7 +164,7 @@ public class LevelManager {
 	}
 	
 	public void initLevel4() {
-		String victory = "";
+		String victory = "Du hast es geschafft, der Darm ist wieder gesund!";
 		level = new Level(new Point(400, 400), victory, "darm");
 		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
 		level.add(new Block(300, maxH-500, 400, 50, Color.BLUE));
