@@ -99,7 +99,7 @@ public class Player extends Object {
 	public void move() {
 		setX(getX()+(int) velX);
 		setY(getY()+(int) velY);
-		
+
 		
 		if(right) {
 			velX = 5;
@@ -287,7 +287,12 @@ public class Player extends Object {
 	
 	public void respawn() {
 		setPosition(spawn);
-		resetMovement();
+		//resetMovement();
+		velX = 0;
+		velY = 0;
+		up = false;
+		falling = true;
+		jumping = false;
 	}
 	
 	public void resetMovement() {
@@ -419,6 +424,11 @@ public class Player extends Object {
 
 	public Point getSpawn() {
 		return spawn;
+	}
+
+
+	public float getVelX() {
+		return velX;
 	}
 
 

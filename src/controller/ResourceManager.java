@@ -19,7 +19,7 @@ public class ResourceManager {
 
 	public LevelManager lm;
 	public BufferedImage menu, manual, pause,victory, complete, gameover, heart, head, liver, stom, overview,
-							aright, awrong, quiz, teacher, energy, life, pipe, boss1, boss1_shoot, enemy1_r, enemy1_l, enemy2_r, enemy2_l, enemy3_r, enemy3_l;
+							aright, awrong, quiz, teacher, energy, life, pipe, boss1, boss1_shoot, enemy1_r, enemy1_l, enemy2_r, enemy2_l, enemy3_r, enemy3_l, bubble;
 	public ArrayList<BufferedImage> bgList;
 	
 	public ResourceManager(LevelManager lm) throws IOException {
@@ -78,6 +78,8 @@ public class ResourceManager {
 		enemy3_r = ImageIO.read(ResourceManager.class.getResource("/image/enemy/enemy3_r.png"));
 		enemy3_l = ImageIO.read(ResourceManager.class.getResource("/image/enemy/enemy3_l.png"));
 		
+		//misc
+		bubble = ImageIO.read(ResourceManager.class.getResource("/image/misc/bubble.png"));
 		loadItemImages();
 	}
 	
