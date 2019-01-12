@@ -62,20 +62,3 @@ Welche Aussage ist im Hinblick auf die Physiologie des Magen-Darm-Trakts falsch?
 Die saltatorische Erregungsleitung steuert die Magen-Darm-Motorik.
 Im Dünndarm werden hauptsächlich Nährstoffe, Elektrolyte, wasserlösliche Vitamine und Flüssigkeit resorbiert.
 Der Speichel besteht zu 99% aus Wasser.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

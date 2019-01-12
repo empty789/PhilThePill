@@ -1,4 +1,4 @@
-Wie viele Lappen kann man an der Leber unterscheiden  ?
+Wie viele Lappen kann man an der Leber unterscheiden?
 4 Leberlappen
 2 Leberlappen
 5 Leberlappen
@@ -6,7 +6,7 @@ Welche Aussage zur Funktion der Leber ist  falsch?
 in der Leber wird Erythropoetin produziert
 die Leber speichert Glucose in Form von Glykogen
 in der Leber erfolgt die Synthese des Harnstoffs
-Welche Substanz verleiht der Galle die gelb-grüne Färbung ?
+Welche Substanz verleiht der Galle die gelb-grüne Färbung?
 Bilirubin
 Urobilinogen
 Alpha-Amylase

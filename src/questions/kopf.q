@@ -134,4 +134,3 @@ Was gehört nicht zu den Gehörknöchelchen des Mittelohrs?
 Zange
 Hammer 
 Amboss
-

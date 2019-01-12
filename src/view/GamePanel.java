@@ -163,6 +163,7 @@ public class GamePanel extends JPanel{
 			lvlMenuList.get(num).setActive(true);
 			player.setSpawn(level.getStartPoint());
 			player.respawn();
+			player.resetMovement();
 		}
 		
 	}
@@ -222,8 +223,7 @@ public class GamePanel extends JPanel{
 		answerList.clear();
 		q = qm.nextQuestion(level.getTopic());
 		qText = q.getQuestion();
-		qText += " "+qText;
-		qText += " "+qText;
+
 		ArrayList<String> answers = q.getAnswers();
 
 		boolean foundIt = false;
@@ -240,10 +240,10 @@ public class GamePanel extends JPanel{
 			
 			if(rand == 0 && foundIt == false) {
 				foundIt = true;
-				answerList.add(new MenuItem((int) (maxW*0.4), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "RIGHT"));
+				answerList.add(new MenuItem((int) (maxW*0.33), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "RIGHT"));
 				rightAnswer = i;
 			}else {
-				answerList.add(new MenuItem((int) (maxW*0.4), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "WRONG"));
+				answerList.add(new MenuItem((int) (maxW*0.33), (int) (maxH*0.4)+i*50, 30, 30, uiFont, Color.WHITE, "x", "WRONG"));
 				
 			}
 			
@@ -456,21 +456,21 @@ public class GamePanel extends JPanel{
 			}else {
 				g.setFont(answerFont);
 			}
-			g.drawString(a1Text,(int) (maxW*0.4)+40, (int) (maxH*0.4)+23);
+			g.drawString(a1Text,(int) (maxW*0.33)+40, (int) (maxH*0.4)+23);
 			
 			if(delAnswer == 1 && showHint) {
 				g.setFont(answerFont_del);
 			}else {
 				g.setFont(answerFont);
 			}
-			g.drawString(a2Text,(int) (maxW*0.4)+40, (int) (maxH*0.4)+23+50);
+			g.drawString(a2Text,(int) (maxW*0.33)+40, (int) (maxH*0.4)+23+50);
 			
 			if(delAnswer == 2 && showHint) {
 				g.setFont(answerFont_del);
 			}else {
 				g.setFont(answerFont);
 			}
-			g.drawString(a3Text,(int) (maxW*0.4)+40, (int) (maxH*0.4)+23+100);
+			g.drawString(a3Text,(int) (maxW*0.33)+40, (int) (maxH*0.4)+23+100);
 		}else if(state == GameState.ARIGHT) {
 			lastState = GameState.ARIGHT;
 			g.drawImage(resM.aright, 0, 0, maxW, maxH, null);

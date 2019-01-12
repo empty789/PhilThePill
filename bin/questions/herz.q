@@ -170,5 +170,3 @@ Wie kam die Mitralklappe des Herzens zu ihrem Namen?
 Ihre zwei Segel erinnern an die zweizipflige Bischofsmütze (Mitra).
 MITRA heißt MITTE – sie liegt in der Mitte des Herzen.
 Der tschechische Arzt Vazlav Mitral beschrieb sie erstmals vor rund dreihundert Jahren.
-
-
