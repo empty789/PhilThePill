@@ -59,7 +59,8 @@ public class GamePanel extends JPanel{
 	private int maxH;
 	
 	private int currentLevel, rightAnswer, delAnswer;
-	private boolean showHint;
+	private boolean showHint, showBubble;
+	private String bubbleText;
 	
 	private Random r;
 	
@@ -80,6 +81,8 @@ public class GamePanel extends JPanel{
 		currentLevel = 0;
 		r = new Random();
 		showHint = false;
+		showBubble = false;
+		bubbleText = "";
 		delAnswer = 99;
 		
 		setPreferredSize(new Dimension(maxW, maxH));
@@ -212,9 +215,15 @@ public class GamePanel extends JPanel{
 	}
 	
 	public void setNextQuestion() {
+		if(!showHint) {
+			showBubble = false;
+			bubbleText = "";
+		}
 		answerList.clear();
 		q = qm.nextQuestion(level.getTopic());
 		qText = q.getQuestion();
+		qText += " "+qText;
+		qText += " "+qText;
 		ArrayList<String> answers = q.getAnswers();
 
 		boolean foundIt = false;
@@ -251,6 +260,7 @@ public class GamePanel extends JPanel{
 	public void ShowHint() {
 		if(!showHint && player.getPipes() > 0) {
 			showHint = true;
+			showBubble = true;
 			player.setPipes(player.getPipes()-1);
 			delAnswer = 99;
 			int rand = r.nextInt(100);
@@ -259,8 +269,10 @@ public class GamePanel extends JPanel{
 
 			if(rand >= 90) {
 				answerList.get(rightAnswer).setC(Color.GREEN);
+				bubbleText = "Antwort "+rightAnswer+1+" ist richtig.";
 			}else if(rand >= 45) {
 				answerList.get(rightAnswer).setC(Color.WHITE);
+				bubbleText = "Hier hast du eine neue Frage.";
 				setNextQuestion();
 			}else if(rand < 45){
 				int del = r.nextInt(2);
@@ -269,7 +281,11 @@ public class GamePanel extends JPanel{
 					del = r.nextInt(2);
 				}
 				delAnswer = del;
+				bubbleText = "So, eine falsche Antwort weniger.";
 			}
+		}else if(!showBubble && player.getPipes() == 0){
+			showBubble = true;
+			bubbleText = "Du hast keinen Joker.";
 		}
 		
 	}
@@ -409,17 +425,22 @@ public class GamePanel extends JPanel{
 		}else if(state == GameState.MINIGAME) {
 			lastState = GameState.MINIGAME;
 			g.drawImage(resM.quiz, 0, 0, maxW, maxH, null);
+			
+			if(showBubble) {
+				g.drawImage(resM.bubble, (int) (maxW*0.27), (int) (maxH*0.62), (int) (maxW*0.2), (int) (maxH*0.2), null);
+				g.setFont(answerFont);
+				g.setColor(Color.BLACK);
+				g.drawString(bubbleText, (int) (maxW*0.29), (int) (maxH*0.72));
+			}
+			
 			g.setColor(Color.WHITE);
 			g.setFont(uiFont);
 			g.drawImage(resM.pipe, 180, (int) (maxH*0.05)-35, 80, 50, null);
 			g.drawString(" x"+player.getPipes(), 235, (int) (maxH*0.05));
 			g.setFont(menuFont);
 			g.setColor(Color.WHITE);
-			//g.drawString("QUIZ", maxW/2-150, 100);
-			//drawCenteredString(g, "QUIZ", new Rectangle(0, 0, maxW, (int) (maxH*0.2)), menuFont);
+
 			g.setFont(uiFont);
-			
-			//g.drawString(qText, maxW/10, 200);
 			drawCenteredString(g, qText, new Rectangle(0, 0, maxW, (int) (maxH*0.3)), uiFont);
 
 			answerList.get(0).render(g);
@@ -452,22 +473,15 @@ public class GamePanel extends JPanel{
 			g.drawString(a3Text,(int) (maxW*0.4)+40, (int) (maxH*0.4)+23+100);
 		}else if(state == GameState.ARIGHT) {
 			lastState = GameState.ARIGHT;
-//			g.setColor(Color.WHITE);
-//			drawCenteredString(g, "RICHTIG JUHUUUUUUUUUUUUU!!!!!!!", new Rectangle(0, 0, maxW, maxH), menuFont);
 			g.drawImage(resM.aright, 0, 0, maxW, maxH, null);
 			menuList.get(6).render(g);
 		}else if(state == GameState.AWRONG) {
 			lastState = GameState.AWRONG;
-//			g.setColor(Color.WHITE);
-//			drawCenteredString(g, "FALSCH, WARUM STUDIERST DU EIGENTLICH?!? -1 Leben!", new Rectangle(0, 0, maxW, maxH), menuFont);
 			g.drawImage(resM.awrong, 0, 0, maxW, maxH, null);
 			menuList.get(5).render(g);
 		}else if(state == GameState.LEVELOVERVIEW) {
 			lastState = GameState.LEVELOVERVIEW;
 			g.drawImage(resM.overview, 0, 0, maxW, maxH, null);
-//			g.setFont(menuFont);
-//			g.setColor(Color.WHITE);
-//			drawCenteredString(g, "Level �bersicht", new Rectangle(0, 0, maxW, (int) (maxH*0.2)), menuFont);
 			for(int i=0; i < lvlMenuList.size(); i++) {
 				lvlMenuList.get(i).render(g);
 			}
@@ -477,7 +491,6 @@ public class GamePanel extends JPanel{
 			lastState = GameState.VICTORY;
 			g.drawImage(resM.complete, 0, 0, maxW, maxH, null);
 			g.setColor(Color.WHITE);
-			//drawCenteredString(g, "Gl�ckwunsch!", new Rectangle(0, 0, maxW, (int) (maxH*0.2)), menuFont);
 			g.setFont(vicFont);
 			g.drawString(level.getVicMsg(), (int) (maxW*0.075), (int) (maxH*0.6));
 			menuList.get(4).render(g);
@@ -491,16 +504,50 @@ public class GamePanel extends JPanel{
 	}
 	
 	public void drawCenteredString(Graphics g, String text, Rectangle rect, Font font) {
-	    // Get the FontMetrics
 	    FontMetrics metrics = g.getFontMetrics(font);
-	    // Determine the X coordinate for the text
-	    int x = rect.x + (rect.width - metrics.stringWidth(text)) / 2;
-	    // Determine the Y coordinate for the text (note we add the ascent, as in java 2d 0 is top of the screen)
-	    int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
-	    // Set the font
+	    int stringLength = metrics.stringWidth(text);
+
+	    ArrayList<String> wordList = new ArrayList<String>();
+	    ArrayList<String> sentenceList = new ArrayList<String>();
+
+	    String word = "";
+	    if(stringLength > rect.width*0.9) {
+	    	for(int i=0; i< text.length(); i++) {
+	    		if (text.charAt(i) == ' ') {
+	    		   wordList.add(word);
+	    		   word = "";
+	    		 }else {
+	    			 word += text.charAt(i);
+	    		 }
+	    	}
+	    	wordList.add(word);
+	    	
+	    	
+	    	 String sentence = "";
+	    	while(!wordList.isEmpty()) {
+	    		while(metrics.stringWidth(sentence) < rect.width*0.8 && !wordList.isEmpty()) {
+	    			sentence += wordList.get(0) + " ";
+	    			wordList.remove(0);
+	    		}
+	    		sentenceList.add(sentence);
+	    		sentence = "";
+	    	}
+	    }else {
+	    	sentenceList.add(text);
+	    }
+
+	    
 	    g.setFont(font);
-	    // Draw the String
-	    g.drawString(text, x, y);
+	    
+	    int y = rect.y + ((rect.height - metrics.getHeight()) / 2) + metrics.getAscent();
+	    
+	    for(int i=0; i < sentenceList.size() ; i++) {
+	    	int x = rect.x + (rect.width - metrics.stringWidth(sentenceList.get(i))) / 2;
+
+	    	g.drawString(sentenceList.get(i), x, y);
+	    	y+= metrics.getHeight();
+	    }
+	    
 	}
 
 }

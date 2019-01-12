@@ -176,8 +176,9 @@ public class InputManager implements KeyListener, MouseInputListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		//System.out.println(e.getKeyCode());
+
 		if(gPanel.getState() == GameState.RUNNING) {
+
 			if(e.getKeyCode() == 39) {
 				if(!player.Right()) {
 					keys++;
@@ -212,6 +213,7 @@ public class InputManager implements KeyListener, MouseInputListener{
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if(gPanel.getState() == GameState.RUNNING) {
+
 			if(e.getKeyCode() == 39) {
 				player.setRight(false);
 				keys--;
