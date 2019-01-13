@@ -283,8 +283,9 @@ public class GamePanel extends JPanel{
 
 
 			if(rand >= 90) {
+				int answerT = rightAnswer+1;
 				answerList.get(rightAnswer).setC(Color.GREEN);
-				bubbleText = "Antwort "+rightAnswer+1+" ist richtig.";
+				bubbleText = "Antwort "+answerT+" ist richtig.";
 			}else if(rand >= 45) {
 				answerList.get(rightAnswer).setC(Color.WHITE);
 				bubbleText = "Hier hast du eine neue Frage.";
