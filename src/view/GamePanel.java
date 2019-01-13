@@ -107,7 +107,7 @@ public class GamePanel extends JPanel{
 		menuList.add(new MenuItem((int) (maxW*0.2), (int) (maxH*0.5)+250, 300, 100, menuFont, Color.WHITE, "Beenden", "EXITBUTTON"));
 		
 		//gameover menu
-		menuList.add(new MenuItem(maxW/2-150, (int) (maxH*0.8), 300, 100, menuFont, Color.WHITE, "Zum Menü", "REPLAYBUTTON"));
+		menuList.add(new MenuItem(maxW/2-175, (int) (maxH*0.8), 350, 100, menuFont, Color.WHITE, "Zum Menü", "REPLAYBUTTON"));
 		
 		//victorybtn
 		menuList.add(new MenuItem((int) (maxW*0.15), (int) (maxH*0.75), 300, 100, menuFont, Color.WHITE, "Weiter", "VICTORYBUTTON"));
@@ -121,6 +121,9 @@ public class GamePanel extends JPanel{
 		//joker pipe button (quiz)
 		menuList.add(new MenuItem((int) (maxW*0.8)-100, (int) (maxH*0.2), 300, 100, menuFont, Color.WHITE, "pipe", "PIPEJOKER", resM.pipe));
 		
+		//manual back button
+		menuList.add(new MenuItem((int) (maxW*0.1), (int) (maxH*0.8), 300, 100, menuFont, Color.WHITE, "Zurück", "MANUALBACKBUTTON"));
+				
 		//answer menu
 		answerList = new ArrayList<MenuItem>();
 		
@@ -161,6 +164,7 @@ public class GamePanel extends JPanel{
 			}
 			
 			lvlMenuList.get(num).setActive(true);
+
 			player.setSpawn(level.getStartPoint());
 			player.respawn();
 			player.resetMovement();
@@ -170,6 +174,16 @@ public class GamePanel extends JPanel{
 	
 	public Level getLevel() {
 		return level;
+	}
+	
+	public void restartGame() {
+		lm.resetLevels();
+		resM.loadItemImages();
+		for(int i=0; i<lvlMenuList.size(); i++) {
+			lvlMenuList.get(i).setDone(false);
+		}
+		setCurrentLevel(0);
+		player.restart();
 	}
 	
 	public void setState(GameState state) {
@@ -397,6 +411,8 @@ public class GamePanel extends JPanel{
 				g.fillRect(visibleX - 304 + maxW/2, ((int) (maxH*0.1))-4, 608, 48);
 				g.setColor(Color.RED);
 				g.fillRect(visibleX - 300 + maxW/2, (int) (maxH*0.1), 6*level.getBoss().getHitpoints(), 40);
+				g.setColor(Color.WHITE);
+				drawCenteredString(g, "Boss Lebenspunkte", new Rectangle(visibleX - 304 + maxW/2, ((int) (maxH*0.1))-4, 608, 48), uiFont);
 			}
 			
 
@@ -404,6 +420,7 @@ public class GamePanel extends JPanel{
 				g2d.translate(-cam.getX(), -cam.getY());
 			////////////////////////////////////
 		}else if(state == GameState.MENU) {
+			lastState = GameState.MENU;
 			g.drawImage(resM.menu, 0, 0, maxW, maxH, null);
 			menuList.get(0).render(g);
 			menuList.get(1).setX((int) (maxW*0.2));
@@ -419,6 +436,7 @@ public class GamePanel extends JPanel{
 			menuList.get(2).render(g);
 		}else if(state == GameState.MANUAL) {
 			g.drawImage(resM.manual, 0, 0, maxW, maxH, null);
+			menuList.get(8).render(g);
 		}else if(state == GameState.GAMEOVER) {
 			g.drawImage(resM.gameover, 0, 0, maxW, maxH, null);
 			menuList.get(3).render(g);
@@ -496,6 +514,7 @@ public class GamePanel extends JPanel{
 			menuList.get(4).render(g);
 		}else if(state == GameState.GAMEWON) {
 			g.drawImage(resM.victory, 0, 0, maxW, maxH, null);
+			menuList.get(3).render(g);
 		}
 	}
 	

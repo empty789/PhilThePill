@@ -135,7 +135,6 @@ public class Boss extends Object{
 		
 		if(more) {
 			int r = rand.nextInt(999);
-			System.out.println(r);
 			if(r % 2== 0) {
 				bulletList.add(new AdvancedBullet(ObjectType.BOSS, getPosition() , p.getCenterPosition(), 7, 10, 100, Color.MAGENTA.darker()));
 				Point po = new Point(p.getCenterPosition().x, p.getCenterPosition().y+200);

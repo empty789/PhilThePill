@@ -57,7 +57,7 @@ public class Player extends Object {
 		immune = false;
 		immuneTime = 0;
 		ticks = 0;
-		bullet = new Bullet(ObjectType.PLAYER, 20, 700);
+		bullet = new Bullet(ObjectType.PLAYER, 100, 700);
 		images = new ArrayList<BufferedImage>(); // idle, left, l_fall, l_jump, right, r_fall, r_jump
 		for(int i = 0; i < 9; i++) {
 			try {
@@ -292,6 +292,7 @@ public class Player extends Object {
 		big = true;
 		respawn();
 		setLifes(3);
+		setPipes(0);
 	}
 	
 	public void respawn() {

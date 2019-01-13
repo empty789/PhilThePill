@@ -69,6 +69,7 @@ public class QuestionManager {
 			e1.printStackTrace();
 		}
 		//path to folder
+		
 		final File folder = new File(Paths.get(url).toString());
 		//add found files to fileList
 		for (final File fileEntry : folder.listFiles()) {

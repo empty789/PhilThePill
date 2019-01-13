@@ -34,7 +34,7 @@ public class InputManager implements KeyListener, MouseInputListener{
 		int mX = e.getX();
 		int mY = e.getY();
 		
-		if(gPanel.getState() == GameState.MENU || gPanel.getState() == GameState.PAUSE || gPanel.getState() == GameState.VICTORY || gPanel.getState() == GameState.ARIGHT || gPanel.getState() == GameState.AWRONG || gPanel.getState() == GameState.MINIGAME || gPanel.getState() == GameState.GAMEOVER) {
+		if(gPanel.getState() == GameState.MENU || gPanel.getState() == GameState.PAUSE || gPanel.getState() == GameState.VICTORY || gPanel.getState() == GameState.ARIGHT || gPanel.getState() == GameState.AWRONG || gPanel.getState() == GameState.MINIGAME || gPanel.getState() == GameState.GAMEOVER || gPanel.getState() == GameState.MANUAL|| gPanel.getState() == GameState.GAMEWON) {
 			for(int i = 0; i < items.size(); i++) {
 				if(items.get(i).getBounds().contains(mX, mY) && items.get(i).isVisible() == true) {
 					if(items.get(i).getAction().equals("STARTBUTTON")) {
@@ -44,8 +44,7 @@ public class InputManager implements KeyListener, MouseInputListener{
 						System.exit(0);
 					}else if(items.get(i).getAction().equals("REPLAYBUTTON")) {
 						gPanel.setState(GameState.MENU);
-						player.restart();
-						gPanel.setCurrentLevel(0);
+						gPanel.restartGame();
 					}else if(items.get(i).getAction().equals("MANUALBUTTON")) {
 						gPanel.setState(GameState.MANUAL);
 					}else if(items.get(i).getAction().equals("VICTORYBUTTON")) {
@@ -66,6 +65,8 @@ public class InputManager implements KeyListener, MouseInputListener{
 							
 							
 							
+					}else if(items.get(i).getAction().equals("MANUALBACKBUTTON")) {
+						gPanel.setState(gPanel.getLastState());
 					}
 	
 				}
@@ -203,7 +204,7 @@ public class InputManager implements KeyListener, MouseInputListener{
 			}
 			
 		}
-		if(e.getKeyCode() == 27 && gPanel.getState() != GameState.PAUSE && gPanel.getState() != GameState.MENU) {
+		if(e.getKeyCode() == 27 && gPanel.getState() != GameState.PAUSE && gPanel.getState() != GameState.MENU && gPanel.getState() != GameState.MANUAL) {
 			gPanel.setState(GameState.PAUSE);
 		}else if(e.getKeyCode() == 27 && gPanel.getState() == GameState.PAUSE){
 			gPanel.setState(gPanel.getLastState());
