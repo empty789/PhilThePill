@@ -33,7 +33,6 @@ public class Boss extends Object{
 		hitpoints = 100;
 		cooldown = 0;
 		shooting = false;
-		//bullet = new AdvancedBullet(ObjectType.BOSS, new Point(getX(), getY()), 10, 10, 700);
 		bulletList = new ArrayList<AdvancedBullet>();
 		rand = new Random();
 	}	
@@ -88,7 +87,8 @@ public class Boss extends Object{
 			//player
 			if(bulletList.get(i).getBounds().intersects(p.getBox())) {
 				bulletList.get(i).setAlive(false);
-				p.getDamage();
+				if(!p.isImmune())
+					p.getDamage();
 			}
 			
 			if(!bulletList.get(i).isAlive()) {

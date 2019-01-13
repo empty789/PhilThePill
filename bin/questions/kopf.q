@@ -18,7 +18,7 @@ Das Gehirn ist st‰ndig in Bewegung. Wie viele Gehirnverbindungen werden jede Sek
 Eine Million
 1000
 100.000
-Wie nennt man drei wichtigsten Regionen des menschlichen Gehirns?
+Wie nennt man die drei wichtigsten Regionen des menschlichen Gehirns?
 Groﬂhirn, limbisches System, Kleinhirn
 Groﬂhirn, Nervensystem, Kleinhirn
 Frontallappen, Nervensystem, Groﬂhirn

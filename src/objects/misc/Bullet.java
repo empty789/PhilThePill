@@ -34,7 +34,6 @@ public class Bullet extends Object{
 		}else {
 			setAlive(false);
 			rangeDecay = range;
-			System.out.println("test123");
 		}
 		
 		

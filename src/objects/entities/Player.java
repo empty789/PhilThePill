@@ -57,7 +57,7 @@ public class Player extends Object {
 		immune = false;
 		immuneTime = 0;
 		ticks = 0;
-		bullet = new Bullet(ObjectType.PLAYER, 100, 700);
+		bullet = new Bullet(ObjectType.PLAYER, 20, 700);
 		images = new ArrayList<BufferedImage>(); // idle, left, l_fall, l_jump, right, r_fall, r_jump
 		for(int i = 0; i < 9; i++) {
 			try {
@@ -140,7 +140,7 @@ public class Player extends Object {
 	}
 	
 	public void tick(ArrayList<Object> obj) {
-		//System.out.println(falling + " "+jumping);
+
 		if(big) {
 			setWidth((int) (WIDTH*1.25));
 			setHeight((int) (HEIGHT*1.25));
@@ -158,7 +158,7 @@ public class Player extends Object {
 		}
 		
 		for(int i = 0; i < obj.size(); i++) {
-			//System.out.println(velY);
+
 			//obstacle collision
 			if(getBoundsTop().intersects(obj.get(i).getBounds()) && obj.get(i).isAlive() && (obj.get(i).getType() == ObjectType.OBSTACLE || obj.get(i).getType() == ObjectType.TIMEDOBSTACLE)) {
 				setY(obj.get(i).getY()+obj.get(i).getHeight());
@@ -174,7 +174,7 @@ public class Player extends Object {
 				}else {
 					falling = false;
 				}
-				//work on this, workaround for flickering
+
 				if(big)
 					setY(obj.get(i).getY()-getHeight()+1);
 				
@@ -392,6 +392,11 @@ public class Player extends Object {
 
 	
 	
+	public boolean isImmune() {
+		return immune;
+	}
+
+
 	public int getPipes() {
 		return pipes;
 	}

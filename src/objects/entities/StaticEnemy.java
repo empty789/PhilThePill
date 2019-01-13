@@ -52,7 +52,7 @@ public class StaticEnemy extends Object{
 			//block
 			for(int j = 0; j < obj.size(); j++) {
 				if(bulletList.get(i).getBounds().intersects(obj.get(j).getBounds())) {
-					if(obj.get(j).getType() == ObjectType.OBSTACLE ) {
+					if(obj.get(j).getType() == ObjectType.OBSTACLE || obj.get(j).getType() == ObjectType.TIMEDOBSTACLE) {
 						bulletList.get(i).setAlive(false);		
 					}
 				}
@@ -62,7 +62,8 @@ public class StaticEnemy extends Object{
 			//player
 			if(bulletList.get(i).getBounds().intersects(p.getBox())) {
 				bulletList.get(i).setAlive(false);
-				p.getDamage();
+				if(!p.isImmune())
+					p.getDamage();
 			}
 			
 			if(!bulletList.get(i).isAlive()) {

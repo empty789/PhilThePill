@@ -87,7 +87,12 @@ public class GameLoop implements Runnable{
 				ArrayList<AdvancedBullet> enemyBulletList = staticEnemys.get(i).getBulletList();
 				for(int j = 0; j < enemyBulletList.size(); j++) {
 					if(enemyBulletList.get(j).isAlive()) {
-						enemyBulletList.get(j).move();
+						if(player.getX()+mw.getMaxWidth()/2 <= staticEnemys.get(i).getX()) {
+							enemyBulletList.remove(j);
+						}else {
+							enemyBulletList.get(j).move();
+						}
+						
 					}
 				}
 			}
@@ -121,7 +126,7 @@ public class GameLoop implements Runnable{
 			b.tick(level.getObjects(), player);
 			ArrayList<AdvancedBullet> bulletList = b.getBulletList();
 			for(int i = 0; i < bulletList.size(); i++) {
-				if(player.getX()+mw.getMaxWidth()/2 <= b.getX()) {
+				if(player.getX()+mw.getMaxWidth()/2 <= b.getX()+50) {
 					bulletList.remove(i);
 				}else {
 					bulletList.get(i).move();
@@ -152,7 +157,7 @@ public class GameLoop implements Runnable{
 		}
 		
 		//wincondition
-		if(gPanel.getCurrentLevel() > lm.getLevelList().size()) {
+		if(gPanel.getCurrentLevel() > lm.getLevelList().size()-1) {
 			gPanel.setState(GameState.GAMEWON);
 		}
     }

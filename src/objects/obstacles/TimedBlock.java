@@ -34,6 +34,7 @@ public class TimedBlock extends Block {
 
 			if(ticks % (60/time) == 0) {
 				setColor(getColor().darker());
+				
 			}else if(ticks >= 60*time) {
 				setAlive(false);
 				ticks = 0;

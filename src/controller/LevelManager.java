@@ -39,7 +39,7 @@ public class LevelManager {
 		levelList = new ArrayList<Level>();
 		
 		initLevel1();
-		initLevel1();
+		initLevel2();
 		initLevel3();
 		initLevel4();
 		
@@ -47,11 +47,124 @@ public class LevelManager {
 	}
 
 	public void initLevel1() {
+		//korbi
 		String victory = "Du hast es geschafft, der Kopf ist wieder gesund!";
+		
+		level = new Level(new Point(300, 400), victory, "kopf");
+		level.add(new Block(600, maxH-40, 2700, 40, Color.GREEN));
+		level.add(new Block(300, maxH-400, 50, 50, Color.BLUE));
+		level.add(new Block(0, maxH-720, 100, 720, Color.GREEN));
+		level.add(new Block(1200, maxH-441, 100, 300, Color.YELLOW));
+		level.add(new Block(1400, maxH-280-40, 100, 280, Color.RED));
+		level.add(new Block(600, maxH-60, 20, 40, Color.GREEN));
+		level.add(new Block(800, maxH-400, 50, 50, Color.BLUE));
+		
+		
+		level.add(new Block(2200, maxH-441, 100, 300, Color.YELLOW));
+		level.add(new Block(2800, maxH-441, 100, 300, Color.YELLOW));
+		level.add(new Block(1900, maxH-400, 50, 50, Color.BLUE));
+		level.add(new Block(2400, maxH-800, 50, 50, Color.BLUE));
+		level.add(new Block(2750, maxH-950, 500, 50, Color.BLUE));
+		level.add(new Block(3050, maxH-1351, 50, 300, Color.YELLOW));
+		level.add(new Block(2600, maxH-280-40, 100, 280, Color.RED));
+		level.add(new Block(3200, maxH-280-40, 100, 280, Color.RED));
+		
+		
+		level.add(new Block(3775, maxH-40, 50, 40, Color.GREEN));
+		level.add(new TimedBlock(3600, maxH-40, 400, 40, Color.GREEN, true, 4));
+		level.add(new TimedBlock(3600, maxH-540, 400, 40, Color.GREEN, true, 4));
+		level.add(new Block(3600, maxH-570, 1, 1, Color.GREEN));
+		level.add(new Block(4000, maxH-570, 1, 1, Color.GREEN));
+		level.add(new Block(3600, maxH-70, 1, 1, Color.GREEN));
+		level.add(new Block(4000, maxH-70, 1, 1, Color.GREEN));
+		level.add(new Block(4575, maxH-40, 50, 40, Color.GREEN));
+		level.add(new TimedBlock(4400, maxH-40, 400, 40, Color.GREEN, true, 4));
+		level.add(new TimedBlock(4400, maxH-540, 400, 40, Color.GREEN, true, 4));
+		level.add(new Block(4399, maxH-70, 1, 1, Color.GREEN));
+		level.add(new Block(4399, maxH-570, 1, 1, Color.GREEN));
+		level.add(new Block(4799, maxH-70, 1, 1, Color.GREEN));
+		level.add(new Block(4799, maxH-570, 1, 1, Color.GREEN));
+		
+		
+		level.add(new Block(5200, maxH-40, 460, 40, Color.GREEN));
+		level.add(new Block(5900, maxH-40, 150, 40, Color.GREEN));
+		level.add(new Block(6800, maxH-40, 150, 40, Color.GREEN));
+		level.add(new Block(5530, maxH-441, 50, 300, Color.YELLOW));
+		level.add(new Block(5580, maxH-241, 30, 100, Color.YELLOW));
+		level.add(new Block(5945, maxH-441, 50, 300, Color.YELLOW));
+		level.add(new Block(5200, maxH-400, 50, 50, Color.BLUE));
+		level.add(new Block(5530, maxH-700, 50, 50, Color.BLUE));
+		level.add(new Block(5945, maxH-850, 50, 50, Color.BLUE));
+		level.add(new Block(6300, maxH-280-40, 100, 280, Color.RED));
+		level.add(new Block(6410, maxH-960, 50, 50, Color.BLUE));
+		
+		
+		
+		
+		level.add(new Block(7000, maxH-400, 50, 50, Color.BLUE));
+		
+		level.add(new Block(7000, maxH-700, 50, 50, Color.BLUE));
+		level.add(new Block(7500, maxH-700, 50, 50, Color.BLUE));
+		
+		
+		
+		level.add(new Block(7900, maxH-40, 1500, 40, Color.GREEN));
+		
+		
+		
+		level.add(new Life(500, maxH-600, 60, 50, Color.RED));
+		level.add(new Life(2800, maxH-1000, 60, 50, Color.RED));
+		level.add(new Life(1700, maxH-600, 60, 50, Color.RED));
+		
+		level.add(new Pipe(800, 600, 80, 50, Color.GREEN));
+		level.add(new Pipe(800, 600, 80, 50, Color.GREEN));
+		
+		level.add(new EnergyDrink(1200, maxH-40-60, 30, 60, Color.YELLOW));
+		level.add(new EnergyDrink(3250, maxH-390, 30, 60, Color.YELLOW));
+		level.add(new EnergyDrink(6650, maxH-1000, 30, 60, Color.YELLOW));
+		
+		level.add(new StaticEnemy(1800, maxH-900, 100, 100));
+		//level.add(new StaticEnemy(6800, maxH-900, 100, 100));
+		
+		level.add(new Enemy(1200, maxH-40-100, 100, 100, 3, false));
+		level.add(new Enemy(2000, maxH-40-100, 100, 100, 3, false));
+		level.add(new Enemy(3000, maxH-40-100, 100, 100, 3, false));
+		level.add(new Enemy(3000, maxH-40-100, 100, 100, 4, true));
+		
+		level.add(new Enemy(3850, maxH-110, 50, 50,3, false));
+		level.add(new Enemy(4650, maxH-110, 50, 50, 3, false));
+		
+		
+		level.add(new Enemy(3850, maxH-10-600, 50, 50, 3, false));
+		level.add(new Enemy(4650, maxH-10-600, 50, 50, 3, false));
+		
+		
+		level.add(new Enemy(6000, maxH-40-100, 80, 80, 2, false));
+		
+		
+		level.addTrigger(new Trigger(1500, 0, 100, maxH, Color.GREEN,ObjectType.QUESTTRIGGER));
+		level.addTrigger(new Trigger(3700, 0, 100, maxH, Color.GREEN,ObjectType.QUESTTRIGGER));
+		level.addTrigger(new Trigger(7950, 0, 100, maxH, Color.GREEN,ObjectType.QUESTTRIGGER));
+		level.addTrigger(new Trigger(3000, 0, 100, maxH, Color.GREEN,ObjectType.QUESTTRIGGER));
+		
+		//boss
+		level.add(new Block(8000, maxH-40-1000, 100, 800, Color.GREEN));
+		
+		level.addTrigger(new Trigger(8100, maxH-40-200, 100, 200, Color.GREEN,ObjectType.BLOCKTRIGGER));
+		
+		level.add(new Block(8000, 0, 1400, 100, Color.GREEN));
+		level.add(new Block(9000, 0, 100, maxH, Color.GREEN));
+		
+		level.add(new Boss(8775, maxH-50-500, 200, 200));
+		
+		
+		
+		levelList.add(level);
 		
 	}
 	
 	public void initLevel2() {
+		//saj
 		String victory = "Du hast es geschafft, das Herz ist wieder gesund!";
 		level = new Level(new Point(100, 100), victory, "herz");
 		level.add(new Block(0, maxH-40, 900, 40, Color.GREEN));
@@ -108,8 +221,9 @@ public class LevelManager {
 	}
 	
 	public void initLevel3() {
+		//tiffy
 		String victory = "Du hast es geschafft, die Leber ist wieder gesund!";
-		level = new Level(new Point(400, 400), victory, "kopf");
+		level = new Level(new Point(400, 400), victory, "leber");
 		
 
 		level.add(new StaticEnemy(20, maxH-40-820, 100, 100));
@@ -219,33 +333,90 @@ public class LevelManager {
 	}
 	
 	public void initLevel4() {
+		//marc
 		String victory = "Du hast es geschafft, der Darm ist wieder gesund!";
-		level = new Level(new Point(400, 400), victory, "darm");
-		level.add(new Block(0, maxH-40, 3400, 40, Color.GREEN));
-		level.add(new Block(300, maxH-500, 400, 50, Color.BLUE));
-		level.add(new Block(0, maxH-40-720, 100, 720, Color.GREEN));
-		level.add(new Block(1000, maxH-40-300-101, 100, 300, Color.YELLOW));
-		level.add(new Block(1400, maxH-280-40, 100, 280, Color.RED));
+		level = new Level(new Point(400, 0), victory, "darm");
+		//boden
 		
-		level.add(new Life(500, 600, 50, 50, Color.RED));
-		level.add(new Pipe(800, 600, 60, 20, Color.GREEN));
-		level.add(new Enemy(1200, maxH-40-100, 80, 80, 2, false));
+		level.add(new TimedBlock(700, maxH-40, 1300, 40, Color.GREEN, false, 2));
+		level.add(new Block(0, maxH-40, 900, 40, Color.GREEN));
+		level.add(new Block(2000, maxH-40, 1100, 40, Color.GREEN));
+		level.add(new Block(3100, maxH-40-60-300, 200, 60, Color.GREEN));
+		level.add(new Block(3100, maxH-40-50-250, 50, 50, Color.GREEN));
+		level.add(new Block(3300, maxH-40-120-300, 200, 60, Color.GREEN));
+		level.add(new Block(3500, maxH-40-180-300, 200, 120, Color.GREEN));
+		level.add(new Block(3700, maxH-40-240-300, 200, 60, Color.GREEN));
+		level.add(new Block(3900, maxH-40-300-300, 200, 60, Color.GREEN));
+		level.add(new Block(3100, maxH-40, 1000, 40, Color.GREEN));
+		level.add(new Block(3100, maxH-40-60-300, 600, 60, Color.GREEN));
+		level.add(new TimedBlock(4100, maxH-40-240-300, 200, 60, Color.GREEN, false, 1));
+		level.add(new TimedBlock(4500, maxH-40-240-300, 600, 60, Color.GREEN, false, 1));
+		level.add(new Block(4300, maxH-40-240-300, 200, 60, Color.GREEN));
+		level.add(new Block(4500, maxH, 400, 60, Color.GREEN));
+		level.add(new Block(5100, maxH-250, 120, 40, Color.RED));
+		level.add(new Block(4900, maxH-40-240-300, 200, 60, Color.GREEN));
+		level.add(new Block(5500, maxH-40-240-300, 200, 60, Color.GREEN));
+		level.add(new Block(5900, maxH-40-240-550, 150, 70, Color.GREEN));
+		level.add(new Block(6500, maxH-40, 1500, 40, Color.GREEN));
 		
+		//wand
+		level.add(new Block(0, 0, 100, maxH, Color.GREEN));
+		level.add(new Block(2000, maxH-40-300, 100, 300, Color.GREEN));
+		level.add(new Block(3000, maxH-40-300, 100, 300, Color.GREEN));
+		level.add(new TimedBlock(3660, maxH-40-300, 120, 300, Color.RED, false, 3));
+		
+		//blöcke
+		level.add(new Block(300, maxH-40-260,300, 40, Color.BLUE));
+		level.add(new Block(1150, maxH-40-260,200, 40, Color.GREEN));
+		level.add(new Block(1600, maxH-40-460,60, 40, Color.GREEN));
+		level.add(new TimedBlock(1660, maxH-40-460, 80, 40, Color.GREEN, true, 1));
+		level.add(new TimedBlock(1660, maxH-40, 80, 40, Color.GREEN, true, 2));
+		level.add(new Block(1740, maxH-40-460,60, 40, Color.GREEN));
+		level.add(new Block(4100, maxH-300,100, 300, Color.GREEN));
+		level.add(new Block(6900, 0-100,100, 100, Color.GREEN));
+		
+		//items
+		level.add(new Life(3300, maxH-40-70, 50, 50, Color.RED));
+		level.add(new Pipe(3150, maxH-40-70, 80, 60, Color.GREEN));
+		level.add(new Life(1680, maxH-40-70, 50, 50, Color.RED));
+		level.add(new EnergyDrink(400, maxH-40-85, 25, 60, Color.YELLOW));
+		level.add(new EnergyDrink(4700, maxH-65, 25, 60, Color.YELLOW));
+		
+		//enemys
+		level.add(new Enemy(110, maxH-40-80, 80, 80, 3, false));
+		level.add(new Enemy(1900, maxH-40-350, 80, 80, 3, false));
+		level.add(new StaticEnemy(2500, maxH-40-860,70, 70));
+		level.add(new StaticEnemy(3150, maxH-40-50-250, 50, 50));
+		level.add(new Enemy(2500, maxH-40-85, 80, 80, 3, false));
+		level.add(new Enemy(2300, maxH-40-350, 100, 100, 3, false));
+		level.add(new Enemy(3760, maxH-40-300, 100, 100, 3, true));
+		level.add(new StaticEnemy(4200, maxH-100,100, 100));
+		level.add(new StaticEnemy(6000, maxH-200,200, 200));
+		level.add(new Enemy(6900, maxH-40-100,100, 100, 5, true));
+		level.add(new StaticEnemy(6950, maxH-40-500,50, 50));
+		
+		//questions
+		level.addTrigger(new Trigger(4700, 0, 100, maxH, Color.GREEN,ObjectType.QUESTTRIGGER));
+		level.addTrigger(new Trigger(7000, 0, 100, maxH, Color.GREEN,ObjectType.QUESTTRIGGER));
 		//boss
-		level.add(new Block(2000, maxH-40-1100, 100, 900, Color.GREEN));
-		level.add(new Block(2000, 0, 1400, 100, Color.GREEN));
-		level.add(new Block(3000, 0, 100, maxH, Color.GREEN));
-		
-		level.add(new Boss(2775, maxH-50-500, 200, 200));
-		
-		level.addTrigger(new Trigger(1700, 0, 100, maxH, Color.GREEN, ObjectType.QUESTTRIGGER));
-		
+				level.add(new Block(7000, maxH-40-1000, 100, 800, Color.GREEN));
+				
+				level.addTrigger(new Trigger(7100, maxH-40-200, 100, 200, Color.GREEN,ObjectType.BLOCKTRIGGER));
+				
+				level.add(new Block(7000, 0, 1400, 100, Color.GREEN));
+				level.add(new Block(8000, 0, 100, maxH, Color.GREEN));
+				
+				level.add(new Boss(7800, maxH-50-300, 200, 200));
+				
+				level.add(new TimedBlock(7400, maxH-40-300, 50, 20, Color.YELLOW, true, 2));
+				
+				
 		levelList.add(level);
+		
 	}
 
 	
 	public Level getLevel(int num) {
-		System.out.println(num);
 		if(num >= levelList.size())
 			return levelList.get(levelList.size()-1);
 		else

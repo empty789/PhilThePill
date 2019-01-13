@@ -135,7 +135,6 @@ public class GamePanel extends JPanel{
 		lvlMenuList.add(new LevelItem((int) (maxW*0.28)+450,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Leber", "LEBER", resM.liver));
 		lvlMenuList.add(new LevelItem((int) (maxW*0.28)+675,(int) (maxH*0.3), 150, 150, uiFont, Color.WHITE, "Darm", "DARM", resM.stom));
 		
-		level = lm.getLevel(0);
 		setCurrentLevel(0);
 		
 	}
@@ -153,7 +152,7 @@ public class GamePanel extends JPanel{
 	public void setCurrentLevel(int num) {
 		
 		currentLevel = num;
-		if(num <= lm.getLevelList().size()) {
+		if(num <= lm.getLevelList().size()-1) {
 			level = lm.getLevel(num);
 	
 			if(num != 0)
@@ -163,14 +162,17 @@ public class GamePanel extends JPanel{
 				lvlMenuList.get(i).setActive(false);
 			}
 			
+
 			lvlMenuList.get(num).setActive(true);
 
 			player.setSpawn(level.getStartPoint());
 			player.respawn();
 			player.resetMovement();
+			
 		}
 		
 	}
+
 	
 	public Level getLevel() {
 		return level;
@@ -278,7 +280,6 @@ public class GamePanel extends JPanel{
 			player.setPipes(player.getPipes()-1);
 			delAnswer = 99;
 			int rand = r.nextInt(100);
-			System.out.println(rand);
 
 
 			if(rand >= 90) {
@@ -310,6 +311,7 @@ public class GamePanel extends JPanel{
 
 	@Override
 	protected void paintComponent(Graphics g) {
+
 		super.paintComponent(g);
 		
 		int visibleX = player.getX()-maxW/2;
